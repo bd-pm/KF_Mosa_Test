@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>chatfic - Make your AU</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <!-- Hero Section - Main Landing -->
+  <section class="hero-main" id="hero">
+    <div class="hero-header">
+      <div class="logo">
+        <div class="logo-bubble"></div>
+        <span>chatfic</span>
+      </div>
+    </div>
+    
+    <div class="hero-content">
+      <h1 class="hero-title">Make your AU</h1>
+      <p class="hero-subtitle">Swipe to pick a template</p>
+      
+      <div class="template-preview-container">
+        <div class="template-preview-card" data-template="message">
+          <img src="images/Frame 31.png" alt="Message Chat Template">
+        </div>
+        <div class="template-preview-card active" data-template="story">
+          <img src="images/Stories.png" alt="Instagram Story Template">
+        </div>
+        <div class="template-preview-card" data-template="notification">
+          <img src="images/iOS 15 Push Notifications.png" alt="Lock Screen Template">
+        </div>
+      </div>
+      
+      <button class="start-button" onclick="startWithSelectedTemplate()">
+        Start
+      </button>
+    </div>
+  </section>
+
+
+  <!-- Editor Screen -->
+  <section class="editor" id="editor" style="display:none;">
+    <div class="editor-header">
+      <button class="back-btn" onclick="backToTemplates()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <span class="editor-title">Editor</span>
+      <div class="header-actions">
+        <button class="save-btn" onclick="saveAsImage()">
+          <i class="fas fa-download"></i> Save
+        </button>
+        <button class="share-btn" onclick="toggleShareMenu()">
+          <i class="fas fa-share"></i> Share
+        </button>
+      </div>
+    </div>
+
+    <!-- Share Menu -->
+    <div class="share-menu" id="shareMenu" style="display:none;">
+      <div class="share-options">
+        <button class="share-option" onclick="shareToTikTok()">
+          <i class="fab fa-tiktok"></i>
+          <span>TikTok</span>
+        </button>
+        <button class="share-option" onclick="shareToInstagram()">
+          <i class="fab fa-instagram"></i>
+          <span>Instagram</span>
+        </button>
+        <button class="share-option" onclick="shareToX()">
+          <i class="fab fa-x-twitter"></i>
+          <span>X</span>
+        </button>
+        <button class="share-option" onclick="shareToReddit()">
+          <i class="fab fa-reddit"></i>
+          <span>Reddit</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="editor-content">
+      <div class="phone-mockup">
+        <div class="phone-screen" id="phoneScreen">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+      </div>
+      
+      <div class="editor-controls">
+        <div class="control-group">
+          <label>Username</label>
+          <input type="text" id="usernameInput" placeholder="Enter username...">
+        </div>
+        
+        <!-- Message Chat Controls -->
+        <div class="template-specific-controls" id="messageControls" style="display:none;">
+          <div class="control-group">
+            <label>Messages</label>
+            <div class="messages-container" id="messagesContainer">
+              <!-- Messages will be dynamically added here -->
+            </div>
+            <button class="add-message-btn" onclick="addMessage('received')">+ Add Their Message</button>
+            <button class="add-message-btn" onclick="addMessage('sent')">+ Add My Message</button>
+          </div>
+        </div>
+        
+        <!-- Lock Screen Controls -->
+        <div class="template-specific-controls" id="lockControls" style="display:none;">
+          <div class="control-group">
+            <label>Notifications</label>
+            <div class="notifications-container" id="notificationsContainer">
+              <!-- Notifications will be dynamically added here -->
+            </div>
+            <button class="add-notification-btn" onclick="addNotification()">+ Add Notification</button>
+          </div>
+        </div>
+        
+        <!-- Story Controls -->
+        <div class="template-specific-controls" id="storyControls" style="display:none;">
+          <div class="control-group">
+            <label>Story Text</label>
+            <textarea id="textInput" placeholder="Enter your story text..."></textarea>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label>Profile Image</label>
+          <input type="file" accept="image/*" id="profileImageInput">
+        </div>
+        <div class="control-group">
+          <label>Background Image</label>
+          <input type="file" accept="image/*" id="backgroundImageInput">
+        </div>
+        <div class="control-group">
+          <label>Time</label>
+          <input type="datetime-local" id="timeInput">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Series Management -->
+  <section class="series-section" id="series" style="display:none;">
+    <div class="section-header">
+      <h2>My Series</h2>
+      <button class="create-btn" onclick="createSeries()">
+        <i class="fas fa-plus"></i> New Series
+      </button>
+    </div>
+    <div class="series-list">
+      <!-- Series will be populated here -->
+    </div>
+  </section>
+
+  <!-- Explore Feed -->
+  <section class="explore-section" id="explore" style="display:none;">
+    <div class="section-header">
+      <h2>Explore</h2>
+      <div class="filter-tabs">
+        <button class="filter-tab active">Popular</button>
+        <button class="filter-tab">Latest</button>
+        <button class="filter-tab">Following</button>
+      </div>
+    </div>
+    <div class="feed-grid">
+      <!-- Feed items will be populated here -->
+    </div>
+  </section>
+
+  <!-- Navigation (only shown when not on hero) -->
+  <nav class="top-nav" id="topNav" style="display:none;">
+    <button class="nav-btn active" onclick="navigateTo('create')">Create</button>
+    <button class="nav-btn" onclick="navigateTo('series')">Series</button>
+    <button class="nav-btn" onclick="navigateTo('explore')">Explore</button>
+  </nav>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
