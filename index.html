@@ -974,9 +974,7 @@ body {
       </svg>
       <span class="logo-text" style="font-size:18px;font-weight:800;">chatfic</span>
     </div>
-    <button style="width:36px;height:36px;border:none;background:var(--surface-2);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="toast('알림 기능은 준비 중이에요 🔔')">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
+    <div style="width:36px;height:36px;"></div>
   </div>
 
   <!-- 섹션 헤더 -->
@@ -987,6 +985,9 @@ body {
 
   <div class="scroll" style="padding-top:0;">
     <div class="feed-list">
+
+      <!-- 내가 만든 포스트 (동적) -->
+      <div id="my-feed-posts"></div>
 
       <!-- Card 1 -->
       <div class="feed-card" onclick="go('s-detail',1)">
@@ -1250,55 +1251,22 @@ body {
 
     <!-- Card 0: Chat -->
     <div class="csl-slide selected" data-idx="0" data-dest="s-editor" style="--card-color:#FF4E8B;">
-      <div class="csl-inner" style="background:#F7F7F8;">
-        <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:78px;height:22px;background:#000;border-radius:12px;z-index:10;"></div>
-        <div style="padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:10px;font-weight:600;color:#191919;letter-spacing:0;">9:41</span>
-          <div style="display:flex;gap:4px;align-items:center;">
-            <div style="display:flex;gap:1.5px;align-items:flex-end;"><div style="width:2.5px;height:5px;background:rgba(0,0,0,0.25);border-radius:1px;"></div><div style="width:2.5px;height:7px;background:rgba(0,0,0,0.25);border-radius:1px;"></div><div style="width:2.5px;height:9px;background:#191919;border-radius:1px;"></div><div style="width:2.5px;height:11px;background:#191919;border-radius:1px;"></div></div>
-            <div style="width:14px;height:8px;border:1.5px solid rgba(0,0,0,0.35);border-radius:2px;position:relative;margin-left:2px;"><div style="position:absolute;right:-3px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:rgba(0,0,0,0.35);border-radius:0 1px 1px 0;"></div><div style="width:8px;height:4px;background:#191919;border-radius:1px;margin:1px;"></div></div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:.5px solid rgba(0,0,0,0.07);">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF4E8B,#B24BF3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">S</div>
-          <div><div style="font-size:12px;font-weight:700;color:#191919;letter-spacing:0;">Seonghyeon</div><div style="font-size:9px;color:#8C8C8C;letter-spacing:0;">Chat · Today</div></div>
-        </div>
-        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:1;">
-          <div style="align-self:flex-start;background:#E9E9EB;padding:9px 13px;border-radius:16px;border-bottom-left-radius:4px;font-size:12px;color:#191919;max-width:185px;letter-spacing:0;">i've been thinking about you all day</div>
-          <div style="align-self:flex-end;background:#1C1C1E;padding:9px 13px;border-radius:16px;border-bottom-right-radius:4px;font-size:12px;color:#fff;letter-spacing:0;">stop 🥺</div>
-          <div style="align-self:flex-start;background:#E9E9EB;padding:9px 13px;border-radius:16px;border-bottom-left-radius:4px;font-size:12px;color:#191919;letter-spacing:0;max-width:176px;">does it make your heart race? 😏</div>
-          <div style="align-self:flex-end;background:#1C1C1E;padding:9px 13px;border-radius:16px;border-bottom-right-radius:4px;font-size:12px;color:#fff;letter-spacing:0;">maybe… 💜</div>
-        </div>
-        <div style="padding:10px 14px;border-top:.5px solid rgba(0,0,0,0.07);"><div style="flex:1;background:#EBEBEB;border-radius:22px;padding:8px 14px;font-size:11px;color:#B2B2B2;letter-spacing:0;">Message</div></div>
-        <div style="display:flex;justify-content:center;padding:6px 0 8px;"><div style="width:80px;height:4px;background:rgba(0,0,0,0.12);border-radius:2px;"></div></div>
+      <div class="csl-inner" style="background:#F7F7F8;overflow:hidden;">
+        <img src="images/Frame 31.png" style="width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
       </div>
     </div>
 
     <!-- Card 1: IG Story -->
     <div class="csl-slide" data-idx="1" data-dest="s-editor-story" style="--card-color:#FF6B35;">
-      <div class="csl-inner" style="background:#0f0a1a;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:78px;height:22px;background:#000;border-radius:12px;z-index:10;"></div>
-        <div style="position:absolute;inset:0;background:linear-gradient(160deg,#1a0a2e 0%,#2d1040 45%,#0d0820 100%);"></div>
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%, rgba(255,107,53,0.22) 0%, transparent 65%);"></div>
-        <div style="position:relative;z-index:5;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:10px;font-weight:600;color:#fff;letter-spacing:0;">9:41</span>
-          <div style="display:flex;gap:4px;align-items:center;"><div style="display:flex;gap:1.5px;align-items:flex-end;"><div style="width:2.5px;height:5px;background:rgba(255,255,255,0.35);border-radius:1px;"></div><div style="width:2.5px;height:7px;background:rgba(255,255,255,0.35);border-radius:1px;"></div><div style="width:2.5px;height:9px;background:#fff;border-radius:1px;"></div><div style="width:2.5px;height:11px;background:#fff;border-radius:1px;"></div></div><div style="width:14px;height:8px;border:1.5px solid rgba(255,255,255,0.45);border-radius:2px;position:relative;margin-left:2px;"><div style="position:absolute;right:-3px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:rgba(255,255,255,0.45);border-radius:0 1px 1px 0;"></div><div style="width:8px;height:4px;background:#fff;border-radius:1px;margin:1px;"></div></div></div>
-        </div>
-        <div style="position:relative;z-index:5;padding:10px 14px 0;display:flex;align-items:center;gap:7px;">
-          <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.55);background:linear-gradient(135deg,#FF6B35,#FF4E8B);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">J</div>
-          <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0;">jungkook</span>
-          <span style="font-size:9px;color:rgba(255,255,255,0.4);margin-left:auto;letter-spacing:0;">now</span>
-        </div>
-        <div style="position:relative;z-index:4;flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;padding:16px 0;">
-          <div style="font-size:24px;opacity:0.35;">🖼️</div>
-          <span style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0;">background photo</span>
-        </div>
-        <div style="position:relative;z-index:5;padding:0 18px;display:flex;flex-direction:column;gap:8px;">
-          <div style="align-self:flex-start;font-size:13px;font-weight:800;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,0.8);letter-spacing:0;">you looked beautiful tonight</div>
-          <div style="align-self:flex-end;background:rgba(255,255,255,0.88);padding:7px 11px;border-radius:12px;border-bottom-right-radius:3px;font-size:11px;color:#191919;letter-spacing:0;max-width:155px;">i thought you didn't see me 🥺</div>
-          <div style="align-self:flex-start;background:rgba(255,255,255,0.13);backdrop-filter:blur(8px);padding:7px 11px;border-radius:12px;border-bottom-left-radius:3px;font-size:11px;color:#fff;letter-spacing:0;">i always see you</div>
-        </div>
-        <div style="display:flex;justify-content:center;padding:10px 0;position:relative;z-index:5;"><div style="width:80px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;"></div></div>
+      <div class="csl-inner" style="background:#0f0a1a;overflow:hidden;">
+        <img src="images/Stories.png" style="width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
+      </div>
+    </div>
+
+    <!-- Card 2: Lock Screen -->
+    <div class="csl-slide" data-idx="2" data-dest="s-editor-lock" style="--card-color:#4A9EFF;">
+      <div class="csl-inner" style="background:#000;overflow:hidden;">
+        <img src="images/iOS 15 Push Notifications.png" style="width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
       </div>
     </div>
 
@@ -1315,6 +1283,7 @@ body {
       <!-- 닷 인디케이터 -->
       <div style="display:flex;gap:5px;align-items:center;" id="csl-dots">
         <div class="csl-dot on"></div>
+        <div class="csl-dot"></div>
         <div class="csl-dot"></div>
       </div>
     </div>
@@ -1353,7 +1322,7 @@ body {
       </div>
       <input class="imsg-name-inp" id="artist-name" type="text" value="" maxlength="20" placeholder="Create name" oninput="syncArtistName(this.value)">
     </div>
-    <button onclick="go('s-detail',1)" style="width:40px;height:40px;border-radius:50%;background:#4C6EF5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:opacity 0.2s ease;box-shadow:0 2px 12px rgba(76,110,245,0.45);" onmousedown="this.style.opacity='.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='.75'" ontouchend="this.style.opacity='1'">
+    <button onclick="postSaveChat()" style="width:40px;height:40px;border-radius:50%;background:#4C6EF5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:opacity 0.2s ease;box-shadow:0 2px 12px rgba(76,110,245,0.45);" onmousedown="this.style.opacity='.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='.75'" ontouchend="this.style.opacity='1'">
       <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
@@ -1374,13 +1343,14 @@ body {
     </div>
   </div>
 
+  <!-- BG photo hint (editor-msgs 밖으로 이동, renderEditor()에 의해 지워지지 않도록) -->
+  <div id="editor-bg-hint" onclick="document.getElementById('editor-bg-file').click()">
+    <div style="font-size:32px;opacity:0.35;">🌅</div>
+    <p class="b5-medium" style="color:rgba(255,255,255,0.32);">Tap to add background photo</p>
+  </div>
+
   <!-- Messages -->
   <div class="imsg-msgs" id="editor-msgs">
-    <!-- BG photo hint (BG Chat 템플릿 선택 시) -->
-    <div id="editor-bg-hint" onclick="document.getElementById('editor-bg-file').click()">
-      <div style="font-size:32px;opacity:0.35;">🌅</div>
-      <p class="b5-medium" style="color:rgba(255,255,255,0.32);">Tap to add background photo</p>
-    </div>
     <div class="imsg-ts">Today</div>
     <div style="text-align:center;padding:24px 0 8px;">
       <span style="font-size:13px;color:#C7C7CC;letter-spacing:0;">Start writing your story ✍️</span>
@@ -1427,29 +1397,31 @@ body {
     <div class="topbar-spacer"></div>
   </div>
   <div class="scroll">
-    <div class="detail-image-placeholder">
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(178,75,243,0.25) 0%, transparent 70%);"></div>
-      <div class="detail-chat-preview">
-        <div class="detail-bub recv b3-regular">i've been thinking about you all day</div>
-        <div class="detail-bub sent b3-regular" style="align-self:flex-end;">stop saying things like that 🥺</div>
-        <div class="detail-bub recv b3-regular">why? does it make your heart race? 😏</div>
-        <div class="detail-bub sent b3-regular" style="align-self:flex-end;">maybe… 💜</div>
+    <div id="detail-content">
+      <!-- 내 포스트 detail이면 동적으로 채워짐, 아니면 기본 샘플 -->
+      <div class="detail-image-placeholder">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(178,75,243,0.25) 0%, transparent 70%);"></div>
+        <div class="detail-chat-preview">
+          <div class="detail-bub recv b3-regular">i've been thinking about you all day</div>
+          <div class="detail-bub sent b3-regular" style="align-self:flex-end;">stop saying things like that 🥺</div>
+          <div class="detail-bub recv b3-regular">why? does it make your heart race? 😏</div>
+          <div class="detail-bub sent b3-regular" style="align-self:flex-end;">maybe… 💜</div>
+        </div>
+        <div class="detail-wm b6-regular">full story on <strong>chatfic</strong></div>
       </div>
-      <div class="detail-wm b6-regular">full story on <strong>Bunjang Global</strong></div>
-    </div>
 
-    <div class="detail-info">
-      <div class="detail-user-row">
-        <div class="detail-user">
-          <div class="detail-av">H</div>
-          <div>
-            <p class="t4-bold" style="color:var(--text-1);">@hana_world</p>
-            <span class="c2-medium" style="padding:2px 8px;border-radius:20px;background:rgba(255,78,139,0.12);color:var(--accent);">#seonghyeon</span>
+      <div class="detail-info">
+        <div class="detail-user-row">
+          <div class="detail-user">
+            <div class="detail-av" id="detail-av">H</div>
+            <div>
+              <p class="t4-bold" style="color:var(--text-1);" id="detail-username">@hana_world</p>
+              <span class="c2-medium" style="padding:2px 8px;border-radius:20px;background:rgba(255,78,139,0.12);color:var(--accent);" id="detail-tag">#seonghyeon</span>
+            </div>
           </div>
         </div>
-        <button class="profile-follow-btn t5-bold" onclick="toast('팔로우했어요 💜')">Follow</button>
+        <p class="b4-regular" style="color:var(--text-2);line-height:1.6;margin-bottom:16px;" id="detail-caption">chapter 3 — airport au 🌙 requested by so many of you, i hope you feel it</p>
       </div>
-      <p class="b4-regular" style="color:var(--text-2);line-height:1.6;margin-bottom:16px;">chapter 3 — airport au 🌙 requested by so many of you, i hope you feel it</p>
     </div>
 
     <div class="divider" style="background:var(--border);"></div>
@@ -1494,53 +1466,66 @@ body {
 
 <!-- ══ SCREEN 6: MY PROFILE ══ -->
 <div class="screen" id="s-myprofile">
+  <!-- topbar -->
   <div class="topbar">
-    <button class="topbar-back" onclick="go('s-home',0)">
-      <svg width="9" height="15" fill="none" viewBox="0 0 9 15"><path d="M7.5 1.5l-6 6 6 6" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <span class="t2-bold" style="color:var(--text-1);">My Feed</span>
     <div class="topbar-spacer"></div>
+    <span class="t2-bold" style="color:var(--text-1);">My Page</span>
+    <button id="mp-action-btn" onclick="mpActionBtn()" style="width:32px;height:32px;background:var(--surface-2);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="rgba(255,255,255,0.7)" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
   </div>
-  <div class="scroll">
-    <div class="profile-header">
-      <div class="profile-cover" style="background:linear-gradient(135deg,#1a0a2e 0%,#2d1b4e 50%,#1a1033 100%);">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 40% 50%, rgba(255,78,139,0.25) 0%, transparent 70%);"></div>
-      </div>
-      <div class="profile-av-area">
-        <div class="profile-av-big" style="font-size:26px;">🌙</div>
-        <button style="height:32px;padding:0 16px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;cursor:pointer;font-family:inherit;font-feature-settings:'case' 1,'cpsp' 1,'ss03' 1;color:var(--text-2);letter-spacing:0;" onclick="toast('프로필 편집 기능은 준비 중이에요 ✏️')">
-          <span class="t5-bold">Edit</span>
-        </button>
-      </div>
-      <div class="profile-info">
-        <p class="t1-bold" style="color:var(--text-1);">my_aulog</p>
-        <p class="b5-regular" style="color:var(--text-2);margin-top:2px;">start writing your story ✨</p>
-        <div class="profile-stats">
-          <div class="stat-item">
-            <span class="t4-bold" style="color:var(--text-1);">0</span>
-            <span class="c2-medium" style="color:var(--text-3);">posts</span>
-          </div>
-          <div class="stat-item">
-            <span class="t4-bold" style="color:var(--text-1);">0</span>
-            <span class="c2-medium" style="color:var(--text-3);">followers</span>
-          </div>
-          <div class="stat-item">
-            <span class="t4-bold" style="color:var(--text-1);">0</span>
-            <span class="c2-medium" style="color:var(--text-3);">likes</span>
-          </div>
-        </div>
-      </div>
+
+  <!-- 프로필 헤더 -->
+  <div style="padding:12px 20px 16px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);flex-shrink:0;">
+    <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FF4E8B,#B24BF3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🌙</div>
+    <div style="flex:1;min-width:0;">
+      <p class="t2-bold" style="color:var(--text-1);">my_aulog</p>
+      <p class="b5-regular" style="color:var(--text-3);margin-top:1px;">start writing your story</p>
     </div>
-    <div class="divider" style="background:var(--border);"></div>
-    <div style="display:flex;flex-direction:column;align-items:center;padding:64px 32px;text-align:center;gap:8px;">
-      <div style="font-size:40px;margin-bottom:4px;">✨</div>
-      <p class="t4-bold" style="color:var(--text-2);">Your feed is empty</p>
-      <p class="b5-regular" style="color:var(--text-3);line-height:1.5;">Create your first au chat and<br>build your relationship feed</p>
+    <div style="display:flex;gap:16px;text-align:center;">
+      <div><div class="t4-bold" style="color:var(--text-1);" id="mp-post-count">0</div><div class="c2-medium" style="color:var(--text-3);">posts</div></div>
+      <div><div class="t4-bold" style="color:var(--text-1);" id="mp-series-count">0</div><div class="c2-medium" style="color:var(--text-3);">series</div></div>
     </div>
-    <div style="padding:0 20px;"><button class="btn-grad btn-full t4-bold" onclick="go('s-create',1)">Create First Post →</button></div>
-    <div style="height:80px;"></div>
   </div>
-  <!-- Bottom Nav: Me active -->
+
+  <!-- 탭 -->
+  <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">
+    <button id="mp-tab-posts" onclick="mpSwitchTab('posts')" style="flex:1;height:42px;background:none;border:none;border-bottom:2px solid var(--accent);cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:0;">작업물</button>
+    <button id="mp-tab-series" onclick="mpSwitchTab('series')" style="flex:1;height:42px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-3);letter-spacing:0;">시리즈</button>
+  </div>
+
+  <!-- 작업물 탭 -->
+  <div id="mp-panel-posts" class="scroll" style="padding:0;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:72px;">
+    <!-- 필터 바 -->
+    <div style="display:flex;gap:6px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;" id="mp-filter-row">
+      <button class="mp-filter-btn on" data-filter="all" onclick="mpSetFilter('all',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--accent);background:rgba(255,78,139,0.12);color:var(--accent);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">전체</button>
+      <button class="mp-filter-btn" data-filter="noseries" onclick="mpSetFilter('noseries',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">시리즈 미포함</button>
+      <button class="mp-filter-btn" data-filter="chat" onclick="mpSetFilter('chat',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">Chat</button>
+      <button class="mp-filter-btn" data-filter="story" onclick="mpSetFilter('story',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">IG Story</button>
+      <button class="mp-filter-btn" data-filter="lock" onclick="mpSetFilter('lock',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">Lock</button>
+    </div>
+    <div id="mp-posts-list" style="display:flex;flex-direction:column;gap:8px;padding:8px 16px 8px;"></div>
+    <div id="mp-posts-empty" style="display:none;flex-direction:column;align-items:center;padding:56px 32px;text-align:center;gap:6px;">
+      <p class="t4-bold" style="color:var(--text-2);">작업물이 없어요</p>
+      <p class="b5-regular" style="color:var(--text-3);line-height:1.6;">Create에서 만든 작업물이<br>여기에 저장됩니다</p>
+      <button onclick="go('s-create',0)" style="margin-top:12px;padding:10px 22px;border-radius:20px;border:none;background:var(--accent-grad);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">작업물 만들기</button>
+    </div>
+  </div>
+
+  <!-- 시리즈 탭 -->
+  <div id="mp-panel-series" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:72px;">
+    <div id="series-list" style="padding:16px 16px 8px;display:flex;flex-direction:column;gap:12px;"></div>
+    <div id="series-empty" style="display:none;flex-direction:column;align-items:center;padding:56px 32px;text-align:center;gap:6px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="rgba(255,255,255,0.25)" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="rgba(255,255,255,0.25)" stroke-width="1.8"/></svg>
+      </div>
+      <p class="t4-bold" style="color:var(--text-2);">시리즈가 없어요</p>
+      <p class="b5-regular" style="color:var(--text-3);line-height:1.6;">작업물을 시리즈로 묶어서<br>독자들과 공유해보세요</p>
+      <button onclick="seriesOpenCreate()" style="margin-top:12px;padding:10px 22px;border-radius:20px;border:none;background:var(--accent-grad);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">첫 시리즈 만들기</button>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
   <div class="bottom-nav" style="position:absolute;">
     <button class="nav-item" onclick="go('s-create',0)">
       <div class="nav-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 20h9" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" stroke-linecap="round"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -1550,11 +1535,88 @@ body {
       <div class="nav-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="rgba(255,255,255,0.35)" stroke-width="1.8"/><path d="m21 21-4.35-4.35" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" stroke-linecap="round"/></svg></div>
       <span class="c2-medium nav-label">Feed</span>
     </button>
-    <button class="nav-item on" onclick="">
+    <button class="nav-item on">
       <div class="nav-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="var(--accent)" stroke-width="1.8"/><circle cx="12" cy="7" r="4" stroke="var(--accent)" stroke-width="1.8"/></svg></div>
       <span class="c2-medium nav-label" style="color:var(--accent);">Me</span>
     </button>
   </div>
+</div>
+
+<!-- ══ SCREEN 7: SERIES DETAIL ══ -->
+<div class="screen" id="s-series-detail">
+  <div class="topbar" style="flex-shrink:0;">
+    <button class="topbar-back" onclick="go('s-myprofile',0)">
+      <svg width="9" height="15" fill="none" viewBox="0 0 9 15"><path d="M7.5 1.5l-6 6 6 6" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span class="t2-bold" style="color:var(--text-1);" id="sd-topbar-title">Series</span>
+    <button id="sd-edit-btn" onclick="seriesOpenEdit()" style="width:32px;height:32px;background:var(--surface-2);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="scroll" style="padding-top:0;padding-bottom:80px;">
+    <!-- 시리즈 헤더 카드 -->
+    <div id="sd-header" style="margin:0 16px 0;border-radius:0 0 20px 20px;overflow:hidden;">
+      <div id="sd-cover" style="height:140px;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;position:relative;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.25);"></div>
+        <div style="position:relative;z-index:1;">
+          <div id="sd-tag" style="display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.18);color:rgba(255,255,255,0.85);margin-bottom:6px;"></div>
+          <div id="sd-title" class="h2-bold" style="color:#fff;"></div>
+          <div id="sd-desc" class="b5-regular" style="color:rgba(255,255,255,0.65);margin-top:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 통계 + 공유 -->
+    <div style="display:flex;align-items:center;padding:16px 20px 4px;gap:0;">
+      <div style="display:flex;gap:20px;flex:1;">
+        <div><span class="t4-bold" style="color:var(--text-1);" id="sd-ep-count">0</span> <span class="b5-regular" style="color:var(--text-3);">episodes</span></div>
+        <div><span class="t4-bold" style="color:var(--text-1);" id="sd-like-count">0</span> <span class="b5-regular" style="color:var(--text-3);">likes</span></div>
+      </div>
+      <!-- 공유 버튼 -->
+      <button id="sd-share-btn" onclick="seriesShare()" style="display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-1);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;" onmouseenter="this.style.background='var(--surface-2)'" onmouseleave="this.style.background='transparent'">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.8"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.8"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.8"/></svg>
+        링크 공유
+      </button>
+    </div>
+
+    <!-- 구분선 -->
+    <div style="height:1px;background:var(--border);margin:12px 20px;"></div>
+
+    <!-- 에피소드 섹션 헤더 -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 20px 12px;">
+      <span class="t4-bold" style="color:var(--text-1);">에피소드</span>
+      <button onclick="seriesAddEp()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;border:none;background:var(--accent-grad);color:#fff;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        추가
+      </button>
+    </div>
+
+    <!-- 에피소드 목록 -->
+    <div id="sd-ep-list" style="padding:0 16px;display:flex;flex-direction:column;gap:8px;"></div>
+
+    <!-- 에피소드 없을 때 -->
+    <div id="sd-ep-empty" style="display:flex;flex-direction:column;align-items:center;padding:40px 32px;text-align:center;gap:6px;">
+      <p class="b4-regular" style="color:var(--text-3);line-height:1.6;">아직 에피소드가 없어요.<br>+ 추가 버튼으로 첫 화를 넣어보세요.</p>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav" style="position:absolute;">
+    <button class="nav-item" onclick="go('s-create',0)">
+      <div class="nav-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 20h9" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" stroke-linecap="round"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="c2-medium nav-label">Create</span>
+    </button>
+    <button class="nav-item" onclick="go('s-home',1)">
+      <div class="nav-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="rgba(255,255,255,0.35)" stroke-width="1.8"/><path d="m21 21-4.35-4.35" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <span class="c2-medium nav-label">Feed</span>
+    </button>
+    <button class="nav-item on" onclick="go('s-myprofile',0)">
+      <div class="nav-icon"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="var(--accent)" stroke-width="1.8"/><circle cx="12" cy="7" r="4" stroke="var(--accent)" stroke-width="1.8"/></svg></div>
+      <span class="c2-medium nav-label" style="color:var(--accent);">Me</span>
+    </button>
+  </div>
+
 </div>
 
 <!-- ══ IG STORY EDITOR ══ -->
@@ -1564,7 +1626,7 @@ body {
       <svg width="9" height="15" fill="none" viewBox="0 0 9 15"><path d="M7.5 1.5l-6 6 6 6" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <span class="t2-bold" style="color:var(--text-1);">IG Story</span>
-    <button class="t4-bold" style="background:none;border:none;cursor:pointer;font-family:inherit;font-feature-settings:'case' 1,'cpsp' 1,'ss03' 1;letter-spacing:0;" onclick="go('s-detail',1)">
+    <button class="t4-bold" style="background:none;border:none;cursor:pointer;font-family:inherit;font-feature-settings:'case' 1,'cpsp' 1,'ss03' 1;letter-spacing:0;" onclick="postSaveStory()">
       <span style="background:var(--accent-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Post</span>
     </button>
   </div>
@@ -1648,6 +1710,165 @@ body {
   <input type="file" id="av-file" accept="image/*" style="display:none" onchange="sAvImg(this)">
 </div>
 
+<!-- ══ LOCK SCREEN EDITOR ══ -->
+<div class="screen" id="s-editor-lock" style="background:#000;">
+  <!-- topbar -->
+  <div class="topbar" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(12px);flex-shrink:0;position:absolute;top:0;left:0;right:0;z-index:20;">
+    <button class="topbar-back" onclick="go('s-create',0)" style="background:rgba(255,255,255,0.12);">
+      <svg width="9" height="15" fill="none" viewBox="0 0 9 15"><path d="M7.5 1.5l-6 6 6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span class="t2-bold" style="color:#fff;">Lock Screen</span>
+    <button class="t4-bold" style="background:none;border:none;cursor:pointer;font-family:inherit;font-feature-settings:'case' 1,'cpsp' 1,'ss03' 1;letter-spacing:0;" onclick="postSaveLock()">
+      <span style="background:linear-gradient(90deg,#4A9EFF,#7B6EFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Done</span>
+    </button>
+  </div>
+
+  <!-- Preview canvas -->
+  <div id="lock-canvas" style="flex:1;position:relative;overflow:hidden;cursor:pointer;" onclick="lockCanvasClick(event)">
+    <!-- BG -->
+    <div id="lock-bg" style="position:absolute;inset:0;background:linear-gradient(160deg,#0a0a1a 0%,#111130 40%,#050510 100%);background-size:cover;background-position:center;transition:background-image .3s;"></div>
+    <!-- BG hint -->
+    <div id="lock-bg-hint" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;pointer-events:none;z-index:1;">
+      <div style="font-size:32px;opacity:0.3;">🖼️</div>
+      <p class="b5-medium" style="color:rgba(255,255,255,0.25);">Tap anywhere to set wallpaper</p>
+    </div>
+    <!-- Gradient overlay -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 50%,rgba(0,0,0,0.3) 100%);pointer-events:none;z-index:2;"></div>
+    <!-- Time/date block — clickable -->
+    <div id="lock-time-block" style="position:absolute;top:72px;left:0;right:0;text-align:center;z-index:5;padding:0 24px;cursor:pointer;" onclick="event.stopPropagation();lockEditField('datetime')">
+      <div id="lock-time-display" style="font-size:64px;font-weight:200;color:#fff;letter-spacing:-2px;line-height:1;">09:41</div>
+      <div id="lock-date-display" style="font-size:14px;color:rgba(255,255,255,0.75);margin-top:4px;font-weight:400;">Tuesday, June 10</div>
+    </div>
+    <!-- Notifications -->
+    <div id="lock-notifs" style="position:absolute;bottom:80px;left:16px;right:16px;z-index:5;display:flex;flex-direction:column;gap:10px;"></div>
+    <!-- Add notification button -->
+    <div id="lock-add-btn" style="position:absolute;bottom:40px;left:0;right:0;text-align:center;z-index:5;">
+      <button onclick="event.stopPropagation();lockAddNotif()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:7px 18px;color:rgba(255,255,255,0.6);font-size:12px;font-family:inherit;cursor:pointer;backdrop-filter:blur(8px);">+ 알림 추가</button>
+    </div>
+  </div>
+
+  <!-- Settings panel -->
+  <div id="lock-panel" style="flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:0;max-height:320px;overflow-y:auto;">
+
+    <!-- BG row -->
+    <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="rgba(255,255,255,0.5)" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.5)"/><polyline points="21 15 16 10 5 21" stroke="rgba(255,255,255,0.5)" stroke-width="1.8"/></svg>
+      <span class="b4-medium" style="color:var(--text-2);flex:1;">배경화면</span>
+      <button onclick="document.getElementById('lock-bg-file').click()" style="background:var(--surface-3);border:none;border-radius:8px;padding:6px 14px;color:var(--text-1);font-size:12px;font-family:inherit;cursor:pointer;">사진 선택</button>
+      <input type="file" id="lock-bg-file" accept="image/*" style="display:none" onchange="lockSetBg(this)">
+    </div>
+
+    <!-- Datetime row -->
+    <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.5)" stroke-width="1.8"/><polyline points="12 7 12 12 15 15" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div style="flex:1;">
+        <span class="b4-medium" style="color:var(--text-2);">날짜/시간</span>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <input type="time" id="lock-time-inp" value="09:41" oninput="lockUpdateTime()" style="background:var(--surface-2);border:1px solid var(--border-md);border-radius:6px;padding:5px 8px;color:var(--text-1);font-size:13px;font-family:inherit;flex:1;">
+          <input type="date" id="lock-date-inp" oninput="lockUpdateDate()" style="background:var(--surface-2);border:1px solid var(--border-md);border-radius:6px;padding:5px 8px;color:var(--text-1);font-size:13px;font-family:inherit;flex:1.5;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Message count row -->
+    <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="rgba(255,255,255,0.5)" stroke-width="1.8"/></svg>
+      <span class="b4-medium" style="color:var(--text-2);flex:1;">메시지 알림 수</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="lockChangeCount(-1)" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
+        <span id="lock-count-display" class="t2-bold" style="color:var(--text-1);min-width:20px;text-align:center;">1</span>
+        <button onclick="lockChangeCount(1)" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Edit modal overlay -->
+  <div id="lock-edit-modal" style="display:none;position:absolute;inset:0;z-index:50;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:flex-end;">
+    <div style="background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <span id="lock-modal-title" class="t2-bold" style="color:var(--text-1);">알림 편집</span>
+        <button onclick="lockCloseModal()" style="background:var(--surface-3);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--text-2);font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+      </div>
+      <div id="lock-modal-body" style="display:flex;flex-direction:column;gap:10px;"></div>
+      <button id="lock-modal-save" onclick="lockModalSave()" style="margin-top:16px;width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#4A9EFF,#7B6EFF);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GLOBAL MODALS (phone-level, above all screens) ══ -->
+
+<!-- 시리즈 생성/편집 모달 -->
+<div id="series-modal" style="display:none;position:absolute;inset:0;z-index:500;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:flex-end;">
+  <div style="background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <span id="series-modal-title" class="t1-bold" style="color:var(--text-1);">새 시리즈</span>
+      <button onclick="seriesCloseModal()" style="width:28px;height:28px;border-radius:50%;background:var(--surface-3);border:none;cursor:pointer;color:var(--text-2);font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="c1-medium" style="color:var(--text-3);margin-bottom:8px;">커버 색상</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;" id="series-color-row"></div>
+    </div>
+    <div style="margin-bottom:10px;">
+      <input id="series-modal-name" type="text" placeholder="시리즈 제목" maxlength="40" class="dark-input" style="height:48px;font-size:15px;font-weight:700;">
+    </div>
+    <div style="margin-bottom:10px;">
+      <input id="series-modal-desc" type="text" placeholder="한 줄 소개 (선택)" maxlength="80" class="dark-input" style="height:44px;">
+    </div>
+    <div style="margin-bottom:18px;">
+      <input id="series-modal-tag" type="text" placeholder="#태그 (예: #jungkook)" maxlength="30" class="dark-input" style="height:40px;">
+    </div>
+    <button onclick="seriesSave()" style="width:100%;padding:15px;border-radius:14px;border:none;background:var(--accent-grad);color:#fff;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;letter-spacing:0;">저장</button>
+    <div id="series-modal-delete-wrap" style="display:none;margin-top:10px;">
+      <button onclick="seriesDelete()" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,59,48,0.3);background:rgba(255,59,48,0.08);color:#FF3B30;font-size:14px;font-family:inherit;cursor:pointer;">시리즈 삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- 에피소드 추가/편집 모달 -->
+<div id="ep-modal" style="display:none;position:absolute;inset:0;z-index:500;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:flex-end;">
+  <div style="background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-height:90vh;display:flex;flex-direction:column;">
+    <!-- 헤더 -->
+    <div style="padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <span id="ep-modal-title" class="t1-bold" style="color:var(--text-1);">에피소드 추가</span>
+      <button onclick="epCloseModal()" style="width:28px;height:28px;border-radius:50%;background:var(--surface-3);border:none;cursor:pointer;color:var(--text-2);font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <!-- 탭 -->
+    <div style="display:flex;gap:0;padding:14px 20px 0;flex-shrink:0;">
+      <button id="ep-tab-manual" onclick="epSwitchTab('manual')" style="flex:1;padding:8px 0;border:none;border-bottom:2px solid var(--accent);background:none;color:var(--text-1);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">직접 입력</button>
+      <button id="ep-tab-import" onclick="epSwitchTab('import')" style="flex:1;padding:8px 0;border:none;border-bottom:2px solid transparent;background:none;color:var(--text-3);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">작업물에서 불러오기</button>
+    </div>
+
+    <!-- 직접 입력 패널 -->
+    <div id="ep-panel-manual" style="padding:16px 20px 28px;overflow-y:auto;">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+        <div id="ep-num-badge" style="width:40px;height:40px;border-radius:10px;background:var(--accent-grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;">1화</div>
+        <input id="ep-modal-num" type="number" min="1" placeholder="화수" value="1" class="dark-input" style="height:40px;width:70px;flex-shrink:0;" oninput="document.getElementById('ep-num-badge').textContent=this.value+'화'">
+        <input id="ep-modal-name" type="text" placeholder="에피소드 제목" maxlength="50" class="dark-input" style="height:40px;flex:1;">
+      </div>
+      <textarea id="ep-modal-memo" placeholder="간단한 메모 (선택)" maxlength="120" class="dark-input" style="width:100%;height:72px;padding:12px 16px;resize:none;line-height:1.5;margin-bottom:12px;border-radius:8px;font-family:inherit;font-size:14px;color:var(--text-1);background:var(--surface-2);border:1.5px solid var(--border-md);outline:none;"></textarea>
+      <div style="display:flex;gap:6px;margin-bottom:16px;" id="ep-type-row">
+        <button class="ep-type-btn" data-type="chat" onclick="epPickType(this,'chat')" style="flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;">Chat</button>
+        <button class="ep-type-btn" data-type="story" onclick="epPickType(this,'story')" style="flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;">IG Story</button>
+        <button class="ep-type-btn" data-type="lock" onclick="epPickType(this,'lock')" style="flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;">Lock</button>
+      </div>
+      <button onclick="epSave()" style="width:100%;padding:15px;border-radius:14px;border:none;background:var(--accent-grad);color:#fff;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;">저장</button>
+      <div id="ep-modal-delete-wrap" style="display:none;margin-top:10px;">
+        <button onclick="epDelete()" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,59,48,0.3);background:rgba(255,59,48,0.08);color:#FF3B30;font-size:14px;font-family:inherit;cursor:pointer;">에피소드 삭제</button>
+      </div>
+    </div>
+
+    <!-- 작업물 불러오기 패널 -->
+    <div id="ep-panel-import" style="display:none;padding:12px 16px 28px;overflow-y:auto;max-height:60vh;">
+      <p class="b5-regular" style="color:var(--text-3);margin-bottom:12px;">작업물을 선택하면 에피소드로 추가됩니다</p>
+      <div id="ep-import-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      <div id="ep-import-empty" style="display:none;text-align:center;padding:32px 0;">
+        <p class="b5-regular" style="color:var(--text-3);">저장된 작업물이 없어요</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="b5-medium"></div>
 
 <script>
@@ -1656,9 +1877,282 @@ function go(id, fwd) {
   const prev = document.querySelector('.screen.active');
   const next = document.getElementById(id);
   if (!next || prev === next) return;
-  prev.classList.remove('active');
+  if (prev) prev.classList.remove('active');
   next.classList.add('active', fwd ? 'enter' : 'back');
   setTimeout(() => next.classList.remove('enter','back'), 300);
+}
+
+// ─── POST STORE ──────────────────────────
+const myPosts = []; // [{id, type, artistName, avUrl, msgs, bgUrl, thumb, ts, likes}]
+
+function postSaveChat() {
+  const artistName = document.getElementById('artist-name').value.trim() || 'Artist';
+  if (edMsgs.length === 0) { toast('메시지를 하나 이상 입력해주세요'); return; }
+
+  // 썸네일 HTML 스냅샷 (마지막 3개 메시지)
+  const preview = edMsgs.slice(-3);
+  const id = Date.now();
+  const bgUrl = document.getElementById('editor-msgs').style.backgroundImage || '';
+
+  myPosts.unshift({
+    id, type: 'chat', artistName, avUrl: edAvUrl,
+    msgs: [...edMsgs], bgUrl,
+    preview, ts: new Date(), likes: 0
+  });
+
+  feedRenderMyPosts();
+  postOpenDetail(id);
+  editorReset();
+}
+
+function postSaveStory() {
+  const artistName = document.getElementById('story-name-inp').value.trim() || 'Artist';
+  const bgStyle = document.getElementById('story-bg').style.backgroundImage || '';
+  const id = Date.now();
+
+  myPosts.unshift({
+    id, type: 'story', artistName, avUrl: null,
+    msgs: [...sMsgs], bgUrl: bgStyle,
+    ts: new Date(), likes: 0
+  });
+
+  feedRenderMyPosts();
+  postOpenDetail(id);
+  storyReset();
+}
+
+function postSaveLock() {
+  const time = document.getElementById('lock-time-display').textContent;
+  const date = document.getElementById('lock-date-display').textContent;
+  const id = Date.now();
+
+  myPosts.unshift({
+    id, type: 'lock',
+    artistName: lockNotifs[0] ? lockNotifs[0].username : 'Lock',
+    avUrl: null,
+    lockTime: time, lockDate: date,
+    notifs: [...lockNotifs],
+    bgUrl: document.getElementById('lock-bg').style.backgroundImage || '',
+    ts: new Date(), likes: 0
+  });
+
+  feedRenderMyPosts();
+  postOpenDetail(id);
+}
+
+function postOpenDetail(id) {
+  const post = myPosts.find(p => p.id === id);
+  renderDetailScreen(post);
+  go('s-detail', 1);
+}
+
+function renderDetailScreen(post) {
+  const container = document.getElementById('detail-content');
+  if (!post) return;
+
+  let previewHTML = '';
+  if (post.type === 'chat') {
+    const msgs3 = post.preview || post.msgs.slice(-3);
+    const bubblesHTML = msgs3.map(m => {
+      const isSent = m.who === 'a';
+      return `<div class="detail-bub ${isSent?'sent':'recv'} b3-regular" style="${isSent?'align-self:flex-end;':''}">${escHtml(m.txt||'')}</div>`;
+    }).join('');
+    const bgExtra = post.bgUrl ? `background:linear-gradient(rgba(4,8,6,0.55),rgba(4,8,6,0.55)),${post.bgUrl.replace(/^url\(|\)$/g,'')} center/cover;` : 'background:linear-gradient(155deg,#0f0f1a 0%,#1a1033 55%,#0d1f3c 100%);';
+    previewHTML = `
+      <div class="detail-image-placeholder" style="${bgExtra}">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(178,75,243,0.15) 0%,transparent 70%);"></div>
+        <div class="detail-chat-preview">${bubblesHTML}</div>
+        <div class="detail-wm b6-regular">made with <strong>chatfic</strong></div>
+      </div>`;
+  } else if (post.type === 'story') {
+    const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(155deg,#1a0a2e,#2d1b4e);';
+    const bubblesHTML = (post.msgs||[]).slice(-3).map(m => {
+      const isSent = m.who === 'a';
+      return `<div class="detail-bub ${isSent?'sent':'recv'} b3-regular" style="${isSent?'align-self:flex-end;':''}">${escHtml(m.txt||'')}</div>`;
+    }).join('');
+    previewHTML = `
+      <div class="detail-image-placeholder" style="${bgStyle}">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.3) 0%,transparent 40%,rgba(0,0,0,0.5) 100%);"></div>
+        <div class="detail-chat-preview">${bubblesHTML}</div>
+        <div class="detail-wm b6-regular">made with <strong>chatfic</strong></div>
+      </div>`;
+  } else if (post.type === 'lock') {
+    const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(160deg,#0a0a1a,#111130);';
+    const notifsHTML = (post.notifs||[]).slice(0,2).map(n => `
+      <div style="background:rgba(28,28,36,0.85);border-radius:12px;padding:9px 12px;display:flex;gap:8px;align-items:center;">
+        <div style="width:26px;height:26px;border-radius:7px;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">💬</div>
+        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#fff;">${escHtml(n.username||'')}</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">${escHtml(n.msg||'')}</div></div>
+      </div>`).join('');
+    previewHTML = `
+      <div class="detail-image-placeholder" style="${bgStyle}">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.2);"></div>
+        <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px 16px;gap:10px;">
+          <div style="font-size:42px;font-weight:200;color:#fff;letter-spacing:-2px;">${escHtml(post.lockTime||'00:00')}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:8px;">${escHtml(post.lockDate||'')}</div>
+          ${notifsHTML}
+        </div>
+        <div class="detail-wm b6-regular">made with <strong>chatfic</strong></div>
+      </div>`;
+  }
+
+  const avInitial = (post.artistName||'A')[0].toUpperCase();
+  const avHTML = post.avUrl
+    ? `<div class="detail-av" style="background:none;padding:0;overflow:hidden;"><img src="${post.avUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>`
+    : `<div class="detail-av">${avInitial}</div>`;
+  const typeLabel = {chat:'Chat',story:'IG Story',lock:'Lock Screen'}[post.type]||'';
+
+  container.innerHTML = `
+    ${previewHTML}
+    <div class="detail-info">
+      <div class="detail-user-row">
+        <div class="detail-user">
+          ${avHTML}
+          <div>
+            <p class="t4-bold" style="color:var(--text-1);">@my_aulog</p>
+            <span class="c2-medium" style="padding:2px 8px;border-radius:20px;background:rgba(255,78,139,0.12);color:var(--accent);">#${escHtml(post.artistName)}</span>
+          </div>
+        </div>
+      </div>
+      <p class="b4-regular" style="color:var(--text-2);line-height:1.6;margin-bottom:16px;">${typeLabel} · ${post.artistName} AU</p>
+    </div>
+    <div class="divider" style="background:var(--border);"></div>
+    <div class="detail-actions-row" style="padding-top:16px;">
+      <button class="detail-action" id="like-btn-${post.id}" onclick="toggleLike(${post.id},this)">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span class="b5-medium">${post.likes}</span>
+      </button>
+      <button class="detail-action" onclick="toast('댓글 기능은 준비 중이에요')">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span class="b5-medium">0</span>
+      </button>
+      <button class="detail-action" onclick="toast('저장했어요')">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span class="b5-medium">Save</span>
+      </button>
+      <button class="detail-action" onclick="toast('공유 링크가 복사됐어요')">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.8"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.8"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span class="b5-medium">Share</span>
+      </button>
+    </div>
+    <div style="height:80px;"></div>
+  `;
+}
+
+function toggleLike(id, btn) {
+  const post = myPosts.find(p => p.id === id);
+  if (!post) return;
+  post.liked = !post.liked;
+  post.likes += post.liked ? 1 : -1;
+  btn.style.color = post.liked ? 'var(--accent)' : '';
+  btn.querySelector('span').textContent = post.likes;
+  feedRenderMyPosts();
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function feedRenderMyPosts() {
+  mpRenderPosts();
+  const container = document.getElementById('my-feed-posts');
+  if (!container) return;
+  container.innerHTML = '';
+  myPosts.forEach(post => {
+    const card = document.createElement('div');
+    card.className = 'feed-card';
+    card.onclick = () => { renderDetailScreen(post); go('s-detail',1); };
+
+    // 카드 비주얼
+    let visual = '';
+    if (post.type === 'chat') {
+      const bgExtra = post.bgUrl ? `background:linear-gradient(rgba(4,8,6,0.55),rgba(4,8,6,0.55)),${post.bgUrl.replace(/^url\(|\)$/g,'')} center/cover no-repeat;` : 'background:linear-gradient(160deg,#0f0c1a,#1a0f2e,#0d1520);';
+      const bubblesHTML = (post.preview||[]).map(m => {
+        const isSent = m.who === 'a';
+        return `<div style="align-self:${isSent?'flex-end':'flex-start'};max-width:220px;">
+          <div style="${isSent?'background:rgba(255,255,255,0.88);color:#191919;border-bottom-right-radius:3px;':'background:rgba(255,255,255,0.13);backdrop-filter:blur(10px);color:#fff;border-bottom-left-radius:3px;'}padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.4;">${escHtml(m.txt||'')}</div>
+        </div>`;
+      }).join('');
+      visual = `<div style="width:100%;aspect-ratio:4/5;${bgExtra}position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:32px 20px;gap:10px;">${bubblesHTML}</div>
+        <div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;"><strong style="font-size:9px;color:rgba(255,255,255,0.35);">chatfic</strong></div>
+      </div>`;
+    } else if (post.type === 'story') {
+      const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(155deg,#1a0a2e,#2d1b4e);';
+      const bubblesHTML = (post.msgs||[]).slice(-2).map(m => {
+        const isSent = m.who === 'a';
+        return `<div style="align-self:${isSent?'flex-end':'flex-start'};${isSent?'background:rgba(255,255,255,0.88);color:#191919;':'background:rgba(255,255,255,0.13);color:#fff;'}padding:8px 12px;border-radius:12px;font-size:12px;max-width:200px;">${escHtml(m.txt||'')}</div>`;
+      }).join('');
+      visual = `<div style="width:100%;aspect-ratio:4/5;${bgStyle}position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.3),transparent 40%,rgba(0,0,0,0.5) 100%);"></div>
+        <div style="position:absolute;bottom:20px;left:16px;right:16px;display:flex;flex-direction:column;gap:8px;">${bubblesHTML}</div>
+        <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;"><strong style="font-size:9px;color:rgba(255,255,255,0.35);">chatfic</strong></div>
+      </div>`;
+    } else if (post.type === 'lock') {
+      const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(160deg,#0a0a1a,#111130);';
+      const n = (post.notifs||[])[0];
+      visual = `<div style="width:100%;aspect-ratio:4/5;${bgStyle}position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.2);"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:32px 16px;gap:6px;">
+          <div style="font-size:48px;font-weight:200;color:#fff;letter-spacing:-2px;margin-top:8px;">${escHtml(post.lockTime||'00:00')}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:16px;">${escHtml(post.lockDate||'')}</div>
+          ${n?`<div style="width:100%;background:rgba(28,28,36,0.85);border-radius:12px;padding:9px 12px;display:flex;gap:8px;align-items:center;">
+            <div style="width:26px;height:26px;border-radius:7px;background:#25D366;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;">💬</div>
+            <div><div style="font-size:11px;font-weight:700;color:#fff;">${escHtml(n.username)}</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">${escHtml(n.msg)}</div></div>
+          </div>`:''}
+        </div>
+      </div>`;
+    }
+
+    const avInitial = (post.artistName||'A')[0].toUpperCase();
+    const avInner = post.avUrl
+      ? `<img src="${post.avUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+      : avInitial;
+    const typeTag = {chat:'Chat',story:'Story',lock:'Lock'}[post.type]||'';
+
+    card.innerHTML = `${visual}
+      <div class="feed-meta">
+        <div class="feed-user">
+          <div class="feed-user-av"><div class="feed-user-av-inner">${avInner}</div></div>
+          <div>
+            <p class="b5-medium" style="color:var(--text-1);">@my_aulog</p>
+            <span class="c2-medium feed-tag">#${escHtml(post.artistName)} · ${typeTag}</span>
+          </div>
+        </div>
+        <button class="feed-action-btn c1-medium" onclick="event.stopPropagation();toggleLike(${post.id},this)">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.8"/></svg>
+          ${post.likes}
+        </button>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+/* 에디터 초기화 */
+function editorReset() {
+  // iMessage editor
+  edMsgs.length = 0;
+  edAvUrl = null;
+  edWho = 'a';
+  document.getElementById('artist-name').value = '';
+  document.getElementById('imsg-av').innerHTML = 'S';
+  document.getElementById('imsg-av').style.background = '';
+  document.getElementById('ed-tab-b').textContent = 'Name';
+  document.getElementById('ed-input').value = '';
+  document.getElementById('editor-msgs').style.background = '';
+  document.getElementById('s-editor').classList.remove('editor-bg-mode');
+  document.getElementById('editor-bg-hint').classList.remove('show');
+  renderEditor();
+}
+
+function storyReset() {
+  sMsgs.length = 0;
+  document.getElementById('story-bg').style.backgroundImage = '';
+  document.getElementById('story-bg-hint').style.display = '';
+  document.getElementById('story-av-btn').textContent = 'J';
+  document.getElementById('story-name-inp').value = 'jungkook';
+  document.getElementById('story-chat-layer').innerHTML = '';
+  document.getElementById('story-stickers').innerHTML = '';
+  sSetMode('bg');
 }
 
 // ─── iMESSAGE EDITOR ────────────────
@@ -1954,8 +2448,9 @@ function makeDraggable(el) {
 
 // ─── TEMPLATE CAROUSEL ────────────────
 const CSL_DATA = [
-  { name:'Chat',     badge:'🔥 Most used', desc:'Classic chat + optional BG photo', dest:'s-editor',       color:'#FF4E8B', badgeBg:'rgba(255,78,139,0.15)', bg:'radial-gradient(ellipse at 50% 30%, rgba(35,12,20,0.92), rgba(8,5,10,0.99))' },
-  { name:'IG Story', badge:'✨ Trending',  desc:'Background photo + free text',     dest:'s-editor-story', color:'#FF6B35', badgeBg:'rgba(255,107,53,0.15)', bg:'radial-gradient(ellipse at 50% 30%, rgba(40,12,8,0.94), rgba(8,4,3,0.99))' },
+  { name:'Chat',        badge:'🔥 Most used', desc:'Classic iMessage chat conversation',  dest:'s-editor',       color:'#FF4E8B', badgeBg:'rgba(255,78,139,0.15)', bg:'radial-gradient(ellipse at 50% 30%, rgba(35,12,20,0.92), rgba(8,5,10,0.99))' },
+  { name:'IG Story',    badge:'✨ Trending',  desc:'Background photo + chat bubbles',      dest:'s-editor-story', color:'#FF6B35', badgeBg:'rgba(255,107,53,0.15)', bg:'radial-gradient(ellipse at 50% 30%, rgba(40,12,8,0.94), rgba(8,4,3,0.99))' },
+  { name:'Lock Screen', badge:'🔒 New',       desc:'iOS lock screen with notifications',   dest:'s-editor-lock',  color:'#4A9EFF', badgeBg:'rgba(74,158,255,0.15)', bg:'radial-gradient(ellipse at 50% 30%, rgba(8,18,40,0.94), rgba(4,6,14,0.99))' },
 ];
 let cslIdx = 0;
 
@@ -1978,24 +2473,30 @@ function cslUpdate(idx) {
 }
 
 function cslGo() {
-  initEditor(cslIdx);
-  go(CSL_DATA[cslIdx].dest, 1);
+  const dest = CSL_DATA[cslIdx].dest;
+  try {
+    if (dest === 's-editor-lock') {
+      lockInit();
+    } else if (dest === 's-editor-story') {
+      storyReset();
+    } else {
+      initEditor(cslIdx);
+    }
+  } catch(e) { console.error('cslGo init error:', e); }
+  go(dest, 1);
 }
 
 function initEditor(tmplIdx) {
   const editor = document.getElementById('s-editor');
   const tmpl = CSL_DATA[tmplIdx];
-  const artistName = document.getElementById('artist-name').value || 'Artist';
 
-  // 초기화
+  // 에디터 완전 초기화
+  editorReset();
   editor.classList.remove('editor-bg-mode');
   document.getElementById('editor-portrait-zone').classList.remove('show');
   document.getElementById('editor-bg-hint').classList.remove('show');
-  // 통합 photo slot 초기화
   document.getElementById('editor-photo-slot').innerHTML = '';
-
-  // Portrait name sync
-  document.getElementById('editor-portrait-name').textContent = artistName;
+  document.getElementById('editor-portrait-name').textContent = 'Artist';
 
   const photoSVG = `<svg width="12" height="12" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="1.8"/></svg>`;
 
@@ -2077,6 +2578,539 @@ function edBgImg(input) {
   });
 })();
 
+// ─── SERIES MANAGER ────────────────────
+const SERIES_COLORS = [
+  { id:'pink',   grad:'linear-gradient(135deg,#FF4E8B,#FF8CC8)',   bg:'rgba(255,78,139,0.18)'  },
+  { id:'purple', grad:'linear-gradient(135deg,#B24BF3,#7B6EFF)',   bg:'rgba(178,75,243,0.18)'  },
+  { id:'blue',   grad:'linear-gradient(135deg,#4A9EFF,#00D4FF)',   bg:'rgba(74,158,255,0.18)'  },
+  { id:'teal',   grad:'linear-gradient(135deg,#00C9A7,#4ECAFF)',   bg:'rgba(0,201,167,0.18)'   },
+  { id:'orange', grad:'linear-gradient(135deg,#FF6B35,#FFAB35)',   bg:'rgba(255,107,53,0.18)'  },
+  { id:'dark',   grad:'linear-gradient(135deg,#2a2a3a,#1a1a2e)',   bg:'rgba(255,255,255,0.06)' },
+];
+
+let seriesList = []; // [{id, name, desc, tag, colorId, episodes:[{id,num,name,memo,type}]}]
+let seriesEditingId = null;
+let currentSeriesId = null;
+let epEditingId = null;
+let epSelectedType = 'chat';
+
+/* ── 시리즈 목록 렌더 ── */
+function seriesRenderList() {
+  const list = document.getElementById('series-list');
+  const empty = document.getElementById('series-empty');
+  const countEl = document.getElementById('mp-series-count');
+  const epCountEl = document.getElementById('mp-ep-count');
+
+  list.innerHTML = '';
+  countEl.textContent = seriesList.length;
+  if (epCountEl) epCountEl.textContent = seriesList.reduce((s,x) => s + x.episodes.length, 0);
+
+  if (seriesList.length === 0) {
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+
+  seriesList.forEach(s => {
+    const col = SERIES_COLORS.find(c => c.id === s.colorId) || SERIES_COLORS[0];
+    const card = document.createElement('div');
+    card.style.cssText = `border-radius:16px;overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:transform .15s;`;
+    card.onmouseenter = () => card.style.transform = 'scale(0.99)';
+    card.onmouseleave = () => card.style.transform = '';
+    card.innerHTML = `
+      <div style="height:80px;background:${col.grad};position:relative;padding:16px;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.18);"></div>
+        <div style="position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;">
+          <div>
+            ${s.tag ? `<div style="font-size:10px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">${s.tag}</div>` : ''}
+            <div class="t2-bold" style="color:#fff;line-height:1.2;">${s.name}</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.25);border-radius:20px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,0.85);font-weight:600;white-space:nowrap;">${s.episodes.length}화</div>
+        </div>
+      </div>
+      <div style="background:var(--surface-2);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          ${s.desc ? `<div class="b5-regular" style="color:var(--text-3);">${s.desc}</div>` : '<div class="b5-regular" style="color:var(--text-4);">소개 없음</div>'}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button onclick="event.stopPropagation();seriesShareById(${s.id})" style="width:30px;height:30px;border-radius:50%;background:var(--surface-3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="링크 공유">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/><circle cx="6" cy="12" r="3" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/><circle cx="18" cy="19" r="3" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/></svg>
+          </button>
+          <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => seriesOpenDetail(s.id));
+    list.appendChild(card);
+  });
+}
+
+/* ── 시리즈 생성 모달 열기 ── */
+function seriesOpenCreate() {
+  seriesEditingId = null;
+  document.getElementById('series-modal-title').textContent = '새 시리즈';
+  document.getElementById('series-modal-name').value = '';
+  document.getElementById('series-modal-desc').value = '';
+  document.getElementById('series-modal-tag').value = '';
+  document.getElementById('series-modal-delete-wrap').style.display = 'none';
+  seriesBuildColorRow(SERIES_COLORS[0].id);
+  const modal = document.getElementById('series-modal');
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('series-modal-name').focus(), 100);
+}
+
+/* ── 시리즈 편집 모달 열기 ── */
+function seriesOpenEdit() {
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  if (!s) return;
+  seriesEditingId = s.id;
+  document.getElementById('series-modal-title').textContent = '시리즈 편집';
+  document.getElementById('series-modal-name').value = s.name;
+  document.getElementById('series-modal-desc').value = s.desc || '';
+  document.getElementById('series-modal-tag').value = s.tag || '';
+  document.getElementById('series-modal-delete-wrap').style.display = 'block';
+  seriesBuildColorRow(s.colorId);
+  // show modal from detail screen
+  const modal = document.getElementById('series-modal');
+  modal.style.display = 'flex';
+}
+
+function seriesBuildColorRow(selectedId) {
+  const row = document.getElementById('series-color-row');
+  row.innerHTML = '';
+  SERIES_COLORS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.style.cssText = `width:28px;height:28px;border-radius:50%;background:${c.grad};border:${c.id===selectedId?'3px solid #fff':'3px solid transparent'};cursor:pointer;transition:border-color .15s;outline:none;`;
+    btn.dataset.cid = c.id;
+    btn.onclick = () => {
+      row.querySelectorAll('button').forEach(b => b.style.borderColor = 'transparent');
+      btn.style.borderColor = '#fff';
+    };
+    row.appendChild(btn);
+  });
+}
+
+function seriesGetSelectedColor() {
+  const row = document.getElementById('series-color-row');
+  const active = [...row.querySelectorAll('button')].find(b => b.style.borderColor === 'rgb(255, 255, 255)' || b.style.borderColor === '#fff' || b.style.borderColor.includes('255'));
+  return active ? active.dataset.cid : SERIES_COLORS[0].id;
+}
+
+/* ── 저장 ── */
+function seriesSave() {
+  const name = document.getElementById('series-modal-name').value.trim();
+  if (!name) { document.getElementById('series-modal-name').focus(); return; }
+  const desc = document.getElementById('series-modal-desc').value.trim();
+  const tag = document.getElementById('series-modal-tag').value.trim();
+  const colorId = seriesGetSelectedColor();
+
+  if (seriesEditingId !== null) {
+    const s = seriesList.find(x => x.id === seriesEditingId);
+    if (s) { s.name = name; s.desc = desc; s.tag = tag; s.colorId = colorId; }
+    seriesRenderList();
+    seriesRenderDetail(seriesEditingId);
+  } else {
+    const id = Date.now();
+    seriesList.push({ id, name, desc, tag, colorId, episodes: [] });
+    seriesRenderList();
+  }
+  seriesCloseModal();
+}
+
+function seriesCloseModal() {
+  document.getElementById('series-modal').style.display = 'none';
+  seriesEditingId = null;
+}
+
+/* ── 삭제 ── */
+function seriesDelete() {
+  seriesList = seriesList.filter(x => x.id !== seriesEditingId);
+  seriesRenderList();
+  seriesCloseModal();
+  go('s-myprofile', 0);
+}
+
+/* ── 시리즈 상세 열기 ── */
+function seriesOpenDetail(id) {
+  currentSeriesId = id;
+  seriesRenderDetail(id);
+  go('s-series-detail', 1);
+}
+
+function seriesRenderDetail(id) {
+  const s = seriesList.find(x => x.id === id);
+  if (!s) return;
+  const col = SERIES_COLORS.find(c => c.id === s.colorId) || SERIES_COLORS[0];
+
+  document.getElementById('sd-topbar-title').textContent = s.name;
+  document.getElementById('sd-title').textContent = s.name;
+  document.getElementById('sd-desc').textContent = s.desc || '';
+  document.getElementById('sd-tag').textContent = s.tag || '';
+  document.getElementById('sd-tag').style.display = s.tag ? 'inline-block' : 'none';
+  document.getElementById('sd-cover').style.background = col.grad;
+  document.getElementById('sd-ep-count').textContent = s.episodes.length;
+  document.getElementById('sd-like-count').textContent = Math.floor(s.episodes.length * 142 + 12);
+
+  // 에피소드 목록
+  const epList = document.getElementById('sd-ep-list');
+  const epEmpty = document.getElementById('sd-ep-empty');
+  epList.innerHTML = '';
+
+  if (s.episodes.length === 0) {
+    epEmpty.style.display = 'flex';
+  } else {
+    epEmpty.style.display = 'none';
+    const sorted = [...s.episodes].sort((a,b) => a.num - b.num);
+    sorted.forEach(ep => {
+      const typeLabel = { chat:'Chat', story:'IG Story', lock:'Lock' }[ep.type] || 'Chat';
+      const typeColor = { chat:'#FF4E8B', story:'#FF6B35', lock:'#4A9EFF' }[ep.type] || '#FF4E8B';
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface-2);border-radius:12px;cursor:pointer;border:1px solid var(--border);transition:background .15s;';
+      row.onmouseenter = () => row.style.background = 'var(--surface-3)';
+      row.onmouseleave = () => row.style.background = 'var(--surface-2)';
+      row.innerHTML = `
+        <div style="width:36px;height:36px;border-radius:10px;background:${col.grad};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;">${ep.num}화</div>
+        <div style="flex:1;min-width:0;">
+          <div class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ep.name || ep.num+'화'}</div>
+          ${ep.memo ? `<div class="c1-medium" style="color:var(--text-3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ep.memo}</div>` : ''}
+        </div>
+        <div style="font-size:10px;font-weight:700;color:${typeColor};background:${typeColor}22;padding:3px 8px;border-radius:6px;flex-shrink:0;">${typeLabel}</div>
+        <button onclick="event.stopPropagation();epOpenEdit(${ep.id})" style="width:28px;height:28px;border-radius:50%;background:var(--surface-3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      `;
+      epList.appendChild(row);
+    });
+  }
+}
+
+/* ── 링크 공유 ── */
+function seriesShare() {
+  seriesShareById(currentSeriesId);
+}
+
+function seriesShareById(id) {
+  const s = seriesList.find(x => x.id === id);
+  if (!s) return;
+  const link = `https://chatfic.app/series/${id}`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(() => {
+      toast(`"${s.name}" 링크가 복사됐어요`);
+    }).catch(() => seriesFallbackCopy(link, s.name));
+  } else {
+    seriesFallbackCopy(link, s.name);
+  }
+}
+
+function seriesFallbackCopy(text, name) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); toast(`"${name}" 링크가 복사됐어요`); } catch(e) { toast('링크: ' + text); }
+  document.body.removeChild(ta);
+}
+
+/* ── 에피소드 추가 ── */
+function seriesAddEp() {
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  if (!s) return;
+  epEditingId = null;
+  const nextNum = s.episodes.length > 0 ? Math.max(...s.episodes.map(e=>e.num)) + 1 : 1;
+  document.getElementById('ep-modal-title').textContent = '에피소드 추가';
+  document.getElementById('ep-modal-num').value = nextNum;
+  document.getElementById('ep-num-badge').textContent = nextNum + '화';
+  document.getElementById('ep-modal-name').value = '';
+  document.getElementById('ep-modal-memo').value = '';
+  document.getElementById('ep-modal-delete-wrap').style.display = 'none';
+  epSelectedType = 'chat';
+  epResetTypeBtns();
+  document.getElementById('ep-modal').style.display = 'flex';
+  epSwitchTab('manual');
+  setTimeout(() => document.getElementById('ep-modal-name').focus(), 100);
+}
+
+function epOpenEdit(id) {
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  if (!s) return;
+  const ep = s.episodes.find(e => e.id === id);
+  if (!ep) return;
+  epEditingId = id;
+  document.getElementById('ep-modal-title').textContent = '에피소드 편집';
+  document.getElementById('ep-modal-num').value = ep.num;
+  document.getElementById('ep-num-badge').textContent = ep.num + '화';
+  document.getElementById('ep-modal-name').value = ep.name || '';
+  document.getElementById('ep-modal-memo').value = ep.memo || '';
+  document.getElementById('ep-modal-delete-wrap').style.display = 'block';
+  epSelectedType = ep.type || 'chat';
+  epResetTypeBtns();
+  document.getElementById('ep-modal').style.display = 'flex';
+  epSwitchTab('manual');
+}
+
+function epPickType(btn, type) {
+  epSelectedType = type;
+  epResetTypeBtns();
+}
+
+function epResetTypeBtns() {
+  document.querySelectorAll('.ep-type-btn').forEach(b => {
+    const isOn = b.dataset.type === epSelectedType;
+    b.style.borderColor = isOn ? 'var(--accent)' : 'var(--border-md)';
+    b.style.background = isOn ? 'rgba(255,78,139,0.12)' : 'transparent';
+    b.style.color = isOn ? 'var(--accent)' : 'var(--text-3)';
+  });
+}
+
+function epSave() {
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  if (!s) return;
+  const num = parseInt(document.getElementById('ep-modal-num').value) || 1;
+  const name = document.getElementById('ep-modal-name').value.trim();
+  const memo = document.getElementById('ep-modal-memo').value.trim();
+
+  if (epEditingId !== null) {
+    const ep = s.episodes.find(e => e.id === epEditingId);
+    if (ep) { ep.num = num; ep.name = name; ep.memo = memo; ep.type = epSelectedType; }
+  } else {
+    s.episodes.push({ id: Date.now(), num, name, memo, type: epSelectedType });
+  }
+  seriesRenderDetail(currentSeriesId);
+  seriesRenderList();
+  epCloseModal();
+}
+
+function epDelete() {
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  if (!s) return;
+  s.episodes = s.episodes.filter(e => e.id !== epEditingId);
+  seriesRenderDetail(currentSeriesId);
+  seriesRenderList();
+  epCloseModal();
+}
+
+function epCloseModal() {
+  document.getElementById('ep-modal').style.display = 'none';
+  epEditingId = null;
+}
+
+// ─── LOCK SCREEN EDITOR ────────────────
+let lockNotifs = []; // [{id, username, avatar(url|null), msg, time, count}]
+let lockNotifCount = 1; // 표시할 알림 개수
+let lockEditingId = null; // 현재 편집 중인 notif id
+let lockModalMode = null; // 'notif' | 'datetime'
+
+function lockInit() {
+  // 오늘 날짜를 date input에 세팅
+  const now = new Date();
+  const dd = now.toISOString().slice(0,10);
+  document.getElementById('lock-date-inp').value = dd;
+  lockUpdateDate();
+  lockRender();
+}
+
+function lockSetBg(input) {
+  const file = input.files[0]; if (!file) return;
+  const url = URL.createObjectURL(file);
+  document.getElementById('lock-bg').style.backgroundImage = `url(${url})`;
+  document.getElementById('lock-bg').style.backgroundSize = 'cover';
+  document.getElementById('lock-bg').style.backgroundPosition = 'center';
+  document.getElementById('lock-bg-hint').style.display = 'none';
+}
+
+function lockCanvasClick(e) {
+  document.getElementById('lock-bg-file').click();
+}
+
+function lockUpdateTime() {
+  const val = document.getElementById('lock-time-inp').value;
+  if (!val) return;
+  document.getElementById('lock-time-display').textContent = val;
+}
+
+function lockUpdateDate() {
+  const val = document.getElementById('lock-date-inp').value;
+  if (!val) return;
+  const d = new Date(val + 'T00:00:00');
+  const opts = { weekday:'long', month:'long', day:'numeric' };
+  document.getElementById('lock-date-display').textContent = d.toLocaleDateString('en-US', opts);
+}
+
+function lockChangeCount(delta) {
+  lockNotifCount = Math.max(1, Math.min(5, lockNotifCount + delta));
+  document.getElementById('lock-count-display').textContent = lockNotifCount;
+  lockRender();
+}
+
+function lockAddNotif() {
+  lockEditingId = null;
+  lockOpenModal('notif', {
+    username: '',
+    avatar: null,
+    msg: '',
+    time: 'now',
+    count: ''
+  });
+}
+
+function lockRender() {
+  const container = document.getElementById('lock-notifs');
+  container.innerHTML = '';
+  const visible = lockNotifs.slice(0, lockNotifCount);
+  visible.forEach(n => {
+    const el = buildNotifEl(n);
+    container.appendChild(el);
+  });
+  // add btn position
+  const addBtn = document.getElementById('lock-add-btn');
+  if (lockNotifs.length >= 5) {
+    addBtn.style.display = 'none';
+  } else {
+    addBtn.style.display = 'block';
+  }
+}
+
+function buildNotifEl(n) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'background:rgba(28,28,36,0.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;padding:12px 14px;display:flex;gap:10px;align-items:center;cursor:pointer;';
+  wrap.onclick = (e) => { e.stopPropagation(); lockOpenModal('notif', n); };
+
+  // app icon (WhatsApp green)
+  const icon = document.createElement('div');
+  icon.style.cssText = 'width:32px;height:32px;border-radius:8px;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;';
+  if (n.avatar) {
+    icon.innerHTML = `<img src="${n.avatar}" style="width:100%;height:100%;object-fit:cover;">`;
+  } else {
+    icon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>`;
+  }
+  wrap.appendChild(icon);
+
+  // body
+  const body = document.createElement('div');
+  body.style.cssText = 'flex:1;min-width:0;';
+  const nameRow = document.createElement('div');
+  nameRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;';
+  const nameEl = document.createElement('div');
+  nameEl.style.cssText = 'font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;';
+  nameEl.textContent = n.username || 'Username';
+  const timeEl = document.createElement('div');
+  timeEl.style.cssText = 'font-size:11px;color:rgba(255,255,255,0.35);flex-shrink:0;';
+  timeEl.textContent = n.time || 'now';
+  nameRow.appendChild(nameEl);
+  nameRow.appendChild(timeEl);
+  body.appendChild(nameRow);
+
+  const msgEl = document.createElement('div');
+  msgEl.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+  msgEl.textContent = n.msg || '대화를 입력하세요';
+  body.appendChild(msgEl);
+  wrap.appendChild(body);
+
+  // badge count
+  if (n.count && n.count > 0) {
+    const badge = document.createElement('div');
+    badge.style.cssText = 'min-width:20px;height:20px;border-radius:10px;background:#FF3B30;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;padding:0 5px;flex-shrink:0;';
+    badge.textContent = n.count;
+    wrap.appendChild(badge);
+  }
+
+  return wrap;
+}
+
+function lockOpenModal(mode, data) {
+  lockModalMode = mode;
+  const modal = document.getElementById('lock-edit-modal');
+  const title = document.getElementById('lock-modal-title');
+  const body = document.getElementById('lock-modal-body');
+  modal.style.display = 'flex';
+
+  if (mode === 'notif') {
+    lockEditingId = data.id !== undefined ? data.id : null;
+    title.textContent = lockEditingId !== null ? '알림 편집' : '알림 추가';
+
+    let avatarPreview = data.avatar || null;
+
+    body.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div id="lock-modal-av" onclick="document.getElementById('lock-modal-av-file').click()" style="width:44px;height:44px;border-radius:12px;background:#25D366;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          ${avatarPreview ? `<img src="${avatarPreview}" id="lock-modal-av-img" style="width:100%;height:100%;object-fit:cover;">` : `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>`}
+        </div>
+        <input type="file" id="lock-modal-av-file" accept="image/*" style="display:none" onchange="lockModalAvChange(this)">
+        <div style="flex:1;">
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:4px;">프로필 이미지 (탭하여 변경)</div>
+          <input id="lock-modal-username" type="text" placeholder="Username" value="${data.username || ''}" class="dark-input" style="height:38px;">
+        </div>
+      </div>
+      <input id="lock-modal-msg" type="text" placeholder="대화 내용" value="${data.msg || ''}" class="dark-input" style="height:38px;">
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;">
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:4px;">시간</div>
+          <input id="lock-modal-time" type="text" placeholder="now" value="${data.time || 'now'}" class="dark-input" style="height:38px;">
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:4px;">배지 수 (0=없음)</div>
+          <input id="lock-modal-count" type="number" min="0" max="99" placeholder="0" value="${data.count || 0}" class="dark-input" style="height:38px;">
+        </div>
+      </div>
+      ${lockEditingId !== null ? `<button onclick="lockDeleteNotif(${lockEditingId})" style="margin-top:4px;width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,59,48,0.3);background:rgba(255,59,48,0.1);color:#FF3B30;font-size:14px;font-family:inherit;cursor:pointer;">삭제</button>` : ''}
+    `;
+    // Store avatarPreview in closure
+    window._lockModalAvatarUrl = avatarPreview;
+  }
+}
+
+function lockModalAvChange(input) {
+  const file = input.files[0]; if (!file) return;
+  const url = URL.createObjectURL(file);
+  window._lockModalAvatarUrl = url;
+  const av = document.getElementById('lock-modal-av');
+  av.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+}
+
+function lockModalSave() {
+  if (lockModalMode === 'notif') {
+    const username = document.getElementById('lock-modal-username').value.trim();
+    const msg = document.getElementById('lock-modal-msg').value.trim();
+    const time = document.getElementById('lock-modal-time').value.trim() || 'now';
+    const count = parseInt(document.getElementById('lock-modal-count').value) || 0;
+    const avatar = window._lockModalAvatarUrl || null;
+
+    if (lockEditingId !== null) {
+      const idx = lockNotifs.findIndex(n => n.id === lockEditingId);
+      if (idx !== -1) {
+        lockNotifs[idx] = { id: lockEditingId, username, avatar, msg, time, count };
+      }
+    } else {
+      const id = Date.now();
+      lockNotifs.push({ id, username, avatar, msg, time, count });
+    }
+    lockRender();
+    lockCloseModal();
+  }
+}
+
+function lockDeleteNotif(id) {
+  lockNotifs = lockNotifs.filter(n => n.id !== id);
+  lockRender();
+  lockCloseModal();
+}
+
+function lockCloseModal() {
+  document.getElementById('lock-edit-modal').style.display = 'none';
+  lockEditingId = null;
+  lockModalMode = null;
+}
+
+function lockEditField(type) {
+  // scroll panel into view
+  const panel = document.getElementById('lock-panel');
+  if (type === 'datetime') {
+    document.getElementById('lock-time-inp').focus();
+    panel.scrollTop = 60;
+  }
+}
+
 // Toast
 function toast(msg) {
   const el = document.getElementById('toast');
@@ -2088,6 +3122,173 @@ function toast(msg) {
     el.style.transform = 'translateX(-50%) translateY(12px)';
   }, 2200);
 }
+
+// ─── ME 페이지 ────────────────────────
+let mpCurrentTab = 'posts';
+let mpCurrentFilter = 'all';
+
+function mpSwitchTab(tab) {
+  mpCurrentTab = tab;
+  const isPosts = tab === 'posts';
+  document.getElementById('mp-panel-posts').style.display = isPosts ? 'block' : 'none';
+  document.getElementById('mp-panel-series').style.display = isPosts ? 'none' : 'block';
+  const tabPosts = document.getElementById('mp-tab-posts');
+  const tabSeries = document.getElementById('mp-tab-series');
+  tabPosts.style.borderBottomColor = isPosts ? 'var(--accent)' : 'transparent';
+  tabPosts.style.color = isPosts ? 'var(--text-1)' : 'var(--text-3)';
+  tabPosts.style.fontWeight = isPosts ? '700' : '600';
+  tabSeries.style.borderBottomColor = isPosts ? 'transparent' : 'var(--accent)';
+  tabSeries.style.color = isPosts ? 'var(--text-3)' : 'var(--text-1)';
+  tabSeries.style.fontWeight = isPosts ? '600' : '700';
+  if (tab === 'posts') mpRenderPosts();
+  else seriesRenderList();
+}
+
+function mpSetFilter(filter, btn) {
+  mpCurrentFilter = filter;
+  document.querySelectorAll('.mp-filter-btn').forEach(b => {
+    const on = b === btn;
+    b.style.borderColor = on ? 'var(--accent)' : 'var(--border-md)';
+    b.style.background = on ? 'rgba(255,78,139,0.12)' : 'transparent';
+    b.style.color = on ? 'var(--accent)' : 'var(--text-3)';
+  });
+  mpRenderPosts();
+}
+
+function mpActionBtn() {
+  if (mpCurrentTab === 'series') {
+    seriesOpenCreate();
+  } else {
+    go('s-create', 0);
+  }
+}
+
+function mpRenderPosts() {
+  const list = document.getElementById('mp-posts-list');
+  const empty = document.getElementById('mp-posts-empty');
+  const countEl = document.getElementById('mp-post-count');
+  if (!list) return;
+
+  countEl.textContent = myPosts.length;
+
+  // 시리즈에 포함된 postId 목록
+  const seriesPostIds = new Set();
+  seriesList.forEach(s => s.episodes.forEach(ep => { if (ep.postId) seriesPostIds.add(ep.postId); }));
+
+  let filtered = myPosts;
+  if (mpCurrentFilter === 'noseries') filtered = myPosts.filter(p => !seriesPostIds.has(p.id));
+  else if (mpCurrentFilter === 'chat') filtered = myPosts.filter(p => p.type === 'chat');
+  else if (mpCurrentFilter === 'story') filtered = myPosts.filter(p => p.type === 'story');
+  else if (mpCurrentFilter === 'lock') filtered = myPosts.filter(p => p.type === 'lock');
+
+  list.innerHTML = '';
+  if (filtered.length === 0) {
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const typeLabel = { chat:'Chat', story:'IG Story', lock:'Lock Screen' };
+  filtered.forEach(post => {
+    const inSeries = seriesPostIds.has(post.id);
+    const card = document.createElement('div');
+    card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--surface-2);cursor:pointer;border:1px solid var(--border);';
+    card.onclick = () => { renderDetailScreen(post); go('s-detail', 1); };
+
+    const typeColors = { chat:'#FF4E8B', story:'#FF6B35', lock:'#4A9EFF' };
+    const color = typeColors[post.type] || 'var(--accent)';
+    const avInitial = (post.artistName||'A')[0].toUpperCase();
+    const avHtml = post.avUrl
+      ? `<img src="${post.avUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+      : avInitial;
+
+    card.innerHTML = `
+      <div style="width:44px;height:44px;border-radius:12px;background:${color}22;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden;">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${color}33;color:${color};font-size:13px;font-weight:800;">${typeLabel[post.type]||'?'}</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+          <span class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.artistName||'Untitled')}</span>
+          ${inSeries ? `<span style="font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(178,75,243,0.15);color:#B24BF3;font-weight:700;white-space:nowrap;">시리즈</span>` : ''}
+        </div>
+        <div class="c2-medium" style="color:var(--text-3);">${new Date(post.ts).toLocaleDateString('ko-KR')} · ${typeLabel[post.type]||''}</div>
+      </div>
+      <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ─── EP MODAL 탭 ────────────────────────
+function epSwitchTab(tab) {
+  const isManual = tab === 'manual';
+  document.getElementById('ep-panel-manual').style.display = isManual ? 'block' : 'none';
+  document.getElementById('ep-panel-import').style.display = isManual ? 'none' : 'block';
+  const tabManual = document.getElementById('ep-tab-manual');
+  const tabImport = document.getElementById('ep-tab-import');
+  tabManual.style.borderBottomColor = isManual ? 'var(--accent)' : 'transparent';
+  tabManual.style.color = isManual ? 'var(--text-1)' : 'var(--text-3)';
+  tabManual.style.fontWeight = isManual ? '700' : '600';
+  tabImport.style.borderBottomColor = isManual ? 'transparent' : 'var(--accent)';
+  tabImport.style.color = isManual ? 'var(--text-3)' : 'var(--text-1)';
+  tabImport.style.fontWeight = isManual ? '600' : '700';
+  if (!isManual) epRenderImportList();
+}
+
+function epRenderImportList() {
+  const list = document.getElementById('ep-import-list');
+  const empty = document.getElementById('ep-import-empty');
+  if (!list) return;
+
+  // 이미 이 시리즈의 에피소드에 연결된 postId 제외
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  const usedIds = new Set(s ? s.episodes.filter(e=>e.postId).map(e=>e.postId) : []);
+
+  const available = myPosts.filter(p => !usedIds.has(p.id));
+  list.innerHTML = '';
+
+  if (available.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const typeLabel = { chat:'Chat', story:'IG Story', lock:'Lock Screen' };
+  const typeColors = { chat:'#FF4E8B', story:'#FF6B35', lock:'#4A9EFF' };
+  available.forEach(post => {
+    const color = typeColors[post.type] || 'var(--accent)';
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--surface-3);cursor:pointer;border:1px solid var(--border);';
+    row.onclick = () => epImportPost(post.id);
+    row.innerHTML = `
+      <div style="width:38px;height:38px;border-radius:10px;background:${color}33;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-size:10px;font-weight:800;color:${color};">${typeLabel[post.type]||'?'}</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.artistName||'Untitled')}</div>
+        <div class="c2-medium" style="color:var(--text-3);">${new Date(post.ts).toLocaleDateString('ko-KR')}</div>
+      </div>
+      <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.25)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function epImportPost(postId) {
+  const s = seriesList.find(x => x.id === currentSeriesId);
+  if (!s) return;
+  const post = myPosts.find(p => p.id === postId);
+  if (!post) return;
+  const nextNum = s.episodes.length > 0 ? Math.max(...s.episodes.map(e=>e.num)) + 1 : 1;
+  const ep = { id: Date.now(), num: nextNum, name: post.artistName || '에피소드 ' + nextNum, memo: '', type: post.type, postId: post.id };
+  s.episodes.push(ep);
+  epCloseModal();
+  seriesRenderDetail(currentSeriesId);
+  toast(`${nextNum}화가 추가되었어요`);
+}
+
+// ── 초기화 (모든 함수 선언 후) ──
+seriesRenderList();
 </script>
 </body>
 </html>
