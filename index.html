@@ -422,7 +422,7 @@ body {
 .csl-slide {
   flex-shrink:0;
   width:228px;
-  height:420px;
+  height:460px;
   scroll-snap-align:center;
   border-radius:28px;
   position:relative;
@@ -959,10 +959,88 @@ body {
   font-family:inherit; font-feature-settings:'case' 1,'cpsp' 1,'ss03' 1;
   border:1px solid var(--border-md);
 }
+
+/* ── BG 이미지 조절 오버레이 ── */
+#bg-adjust-overlay {
+  display:none; position:absolute; inset:0; z-index:900;
+  background:#000; flex-direction:column;
+}
+#bg-adjust-overlay.show { display:flex; }
+#bg-adjust-canvas {
+  flex:1; position:relative; overflow:hidden;
+  touch-action:none; cursor:grab;
+}
+#bg-adjust-canvas:active { cursor:grabbing; }
+#bg-adjust-img {
+  position:absolute; top:0; left:0;
+  transform-origin:0 0; will-change:transform;
+  pointer-events:none; user-select:none; -webkit-user-select:none;
+  max-width:none; max-height:none;
+}
+#bg-adjust-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px);
+  background-size:33.33% 33.33%;
+}
+#bg-adjust-bar {
+  flex-shrink:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px);
+  padding:14px 20px 28px; display:flex; flex-direction:column; gap:12px;
+}
+#bg-adjust-scale-row {
+  display:flex; align-items:center; gap:10px;
+}
+#bg-adjust-scale-row input[type=range] {
+  flex:1; -webkit-appearance:none; appearance:none;
+  height:4px; border-radius:2px; outline:none;
+  background:linear-gradient(to right, var(--accent) 0%, var(--accent) 50%, rgba(255,255,255,0.18) 50%);
+  cursor:pointer;
+}
+#bg-adjust-scale-row input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+  background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.5);
+}
+#bg-adjust-btns {
+  display:flex; gap:10px;
+}
+.bg-adj-btn {
+  flex:1; padding:13px; border-radius:14px; border:none;
+  font-size:14px; font-weight:700; font-family:inherit; cursor:pointer;
+}
 </style>
 </head>
 <body>
 <div class="phone">
+
+<!-- ══ BG IMAGE ADJUST OVERLAY ══ -->
+<div id="bg-adjust-overlay">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);flex-shrink:0;">
+    <button onclick="bgAdjCancel()" style="background:rgba(255,255,255,0.1);border:none;border-radius:20px;padding:7px 16px;color:rgba(255,255,255,0.75);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">취소</button>
+    <span style="color:#fff;font-size:14px;font-weight:700;">배경 사진 조절</span>
+    <button onclick="bgAdjConfirm()" style="background:var(--accent-grad);border:none;border-radius:20px;padding:7px 16px;color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">완료</button>
+  </div>
+  <div id="bg-adjust-canvas">
+    <img id="bg-adjust-img" src="" alt="">
+    <div id="bg-adjust-grid"></div>
+  </div>
+  <div id="bg-adjust-bar">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+      <span style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:600;">크기</span>
+      <span id="bg-adj-scale-label" style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:600;">100%</span>
+    </div>
+    <div id="bg-adjust-scale-row">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M21 21l-6-6m0 0a7 7 0 1 0-9.9-9.9A7 7 0 0 0 15 15zm-3-5v-4m-2 2h4" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="range" id="bg-adj-slider" min="10" max="300" value="100" oninput="bgAdjSlider(this.value)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M21 21l-6-6m0 0a7 7 0 1 0-9.9-9.9A7 7 0 0 0 15 15z" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button onclick="bgAdjFit('contain')" style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;">맞추기</button>
+      <button onclick="bgAdjFit('cover')" style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;">채우기</button>
+      <button onclick="bgAdjFit('reset')" style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;">원본</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══ SCREEN 1: DISCOVER ══ -->
 <div class="screen" id="s-home">
@@ -1252,21 +1330,21 @@ body {
     <!-- Card 0: Chat -->
     <div class="csl-slide selected" data-idx="0" data-dest="s-editor" style="--card-color:#FF4E8B;">
       <div class="csl-inner" style="background:#F7F7F8;overflow:hidden;">
-        <img src="images/Frame 31.png" style="width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
+        <img src="images/Frame 31.png" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" draggable="false">
       </div>
     </div>
 
     <!-- Card 1: IG Story -->
     <div class="csl-slide" data-idx="1" data-dest="s-editor-story" style="--card-color:#FF6B35;">
       <div class="csl-inner" style="background:#0f0a1a;overflow:hidden;">
-        <img src="images/Stories.png" style="width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
+        <img src="images/Stories.png" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" draggable="false">
       </div>
     </div>
 
     <!-- Card 2: Lock Screen -->
     <div class="csl-slide" data-idx="2" data-dest="s-editor-lock" style="--card-color:#4A9EFF;">
       <div class="csl-inner" style="background:#000;overflow:hidden;">
-        <img src="images/iOS 15 Push Notifications.png" style="width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
+        <img src="images/iOS 15 Push Notifications.png" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;" draggable="false">
       </div>
     </div>
 
@@ -1424,27 +1502,6 @@ body {
       </div>
     </div>
 
-    <div class="divider" style="background:var(--border);"></div>
-
-    <div class="detail-actions-row" style="padding-top:16px;">
-      <button class="detail-action" onclick="this.style.color='var(--accent)';toast('좋아요를 눌렀어요 💜')">
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.8"/></svg>
-        <span class="b5-medium">2,441</span>
-      </button>
-      <button class="detail-action" onclick="toast('댓글 기능은 준비 중이에요 💬')">
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/></svg>
-        <span class="b5-medium">128</span>
-      </button>
-      <button class="detail-action" onclick="toast('저장했어요 🔖')">
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/></svg>
-        <span class="b5-medium">Save</span>
-      </button>
-      <button class="detail-action" onclick="toast('TikTok용으로 저장됐어요 🎵')">
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.8"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.8"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.8"/></svg>
-        <span class="b5-medium">Share</span>
-      </button>
-    </div>
-
     <div style="height:80px;"></div>
   </div>
   <!-- Bottom Nav: Feed active (detail) -->
@@ -1488,10 +1545,21 @@ body {
     </div>
   </div>
 
+  <!-- 최애 · 디데이 배너 -->
+  <div id="mp-bias-banner" onclick="mpOpenBiasModal()" style="margin:12px 16px 0;border-radius:16px;background:var(--surface-2);border:1px solid var(--border);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;flex-shrink:0;">
+    <div id="mp-bias-icon" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#FF4E8B,#B24BF3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⭐</div>
+    <div style="flex:1;min-width:0;">
+      <p id="mp-bias-name" class="b4-medium" style="color:var(--text-1);">최애를 설정해보세요</p>
+      <p id="mp-bias-dday" class="c2-medium" style="color:var(--text-3);margin-top:2px;">입덕날짜를 설정하면 디데이가 표시돼요</p>
+    </div>
+    <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.25)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
   <!-- 탭 -->
   <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">
     <button id="mp-tab-posts" onclick="mpSwitchTab('posts')" style="flex:1;height:42px;background:none;border:none;border-bottom:2px solid var(--accent);cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:0;">작업물</button>
     <button id="mp-tab-series" onclick="mpSwitchTab('series')" style="flex:1;height:42px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-3);letter-spacing:0;">시리즈</button>
+    <button id="mp-tab-activity" onclick="mpSwitchTab('activity')" style="flex:1;height:42px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-3);letter-spacing:0;">활동</button>
   </div>
 
   <!-- 작업물 탭 -->
@@ -1509,6 +1577,21 @@ body {
       <p class="t4-bold" style="color:var(--text-2);">작업물이 없어요</p>
       <p class="b5-regular" style="color:var(--text-3);line-height:1.6;">Create에서 만든 작업물이<br>여기에 저장됩니다</p>
       <button onclick="go('s-create',0)" style="margin-top:12px;padding:10px 22px;border-radius:20px;border:none;background:var(--accent-grad);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">작업물 만들기</button>
+    </div>
+  </div>
+
+  <!-- 활동 탭 -->
+  <div id="mp-panel-activity" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:72px;">
+    <!-- 서브 필터 -->
+    <div style="display:flex;gap:6px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;">
+      <button class="mp-act-btn on" data-act="liked" onclick="mpSetActivity('liked',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--accent);background:rgba(255,78,139,0.12);color:var(--accent);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">❤️ 좋아요</button>
+      <button class="mp-act-btn" data-act="saved" onclick="mpSetActivity('saved',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">🔖 저장</button>
+      <button class="mp-act-btn" data-act="commented" onclick="mpSetActivity('commented',this)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border-md);background:transparent;color:var(--text-3);font-size:12px;font-weight:700;white-space:nowrap;font-family:inherit;cursor:pointer;flex-shrink:0;">💬 댓글</button>
+    </div>
+    <div id="mp-activity-list" style="display:flex;flex-direction:column;gap:8px;padding:8px 16px;"></div>
+    <div id="mp-activity-empty" style="display:none;flex-direction:column;align-items:center;padding:56px 32px;text-align:center;gap:6px;">
+      <p class="t4-bold" style="color:var(--text-2);" id="mp-activity-empty-title">아직 없어요</p>
+      <p class="b5-regular" style="color:var(--text-3);line-height:1.6;" id="mp-activity-empty-desc">피드에서 게시글에 반응해보세요</p>
     </div>
   </div>
 
@@ -1798,6 +1881,39 @@ body {
 
 <!-- ══ GLOBAL MODALS (phone-level, above all screens) ══ -->
 
+<!-- 최애 · 입덕날짜 설정 모달 -->
+<div id="bias-modal" style="display:none;position:absolute;inset:0;z-index:600;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:flex-end;">
+  <div style="background:var(--surface);border-radius:24px 24px 0 0;width:100%;padding:24px 20px 36px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <span class="t2-bold" style="color:var(--text-1);">최애 & 입덕날짜</span>
+      <button onclick="mpCloseBiasModal()" style="width:32px;height:32px;border-radius:50%;background:var(--surface-2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <label class="c1-medium" style="color:var(--text-3);align-self:flex-start;">최애 사진 (선택)</label>
+        <div style="position:relative;width:80px;height:80px;" onclick="document.getElementById('bias-img-inp').click()">
+          <div id="bias-img-preview" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#FF4E8B,#B24BF3);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;cursor:pointer;">⭐</div>
+          <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-radius:50%;background:var(--surface-2);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <input id="bias-img-inp" type="file" accept="image/*" style="display:none;" onchange="biasImgChanged(this)">
+      </div>
+      <div>
+        <label class="c1-medium" style="color:var(--text-3);display:block;margin-bottom:6px;">최애 이름</label>
+        <input id="bias-name-inp" type="text" maxlength="30" placeholder="예: 정국, Jungkook" style="width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;">
+      </div>
+      <div>
+        <label class="c1-medium" style="color:var(--text-3);display:block;margin-bottom:6px;">입덕날짜</label>
+        <input id="bias-date-inp" type="date" style="width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;color-scheme:dark;">
+      </div>
+    </div>
+    <button onclick="mpSaveBias()" style="width:100%;padding:16px;border-radius:16px;border:none;background:var(--accent-grad);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;">저장</button>
+  </div>
+</div>
+
 <!-- 시리즈 생성/편집 모달 -->
 <div id="series-modal" style="display:none;position:absolute;inset:0;z-index:500;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:flex-end;">
   <div style="background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;">
@@ -1869,6 +1985,54 @@ body {
   </div>
 </div>
 
+<!-- 공개 범위 선택 팝업 -->
+<div id="publish-modal" style="display:none;position:absolute;inset:0;z-index:600;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:flex-end;">
+  <div style="background:var(--surface);border-radius:24px 24px 0 0;width:100%;padding:24px 20px 36px;max-height:90vh;overflow-y:auto;">
+
+    <!-- Step 1: 공개 범위 선택 -->
+    <div id="publish-step-1">
+      <p class="t2-bold" style="color:var(--text-1);margin-bottom:4px;">피드에 올릴까요?</p>
+      <p class="b5-regular" style="color:var(--text-3);margin-bottom:24px;">공개 범위를 선택해주세요</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button onclick="publishSelectPublic()" style="width:100%;padding:16px;border-radius:16px;border:none;background:var(--accent-grad);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="1.8"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" stroke="#fff" stroke-width="1.8"/></svg>
+          공개 — 모든 사람이 볼 수 있어요
+        </button>
+        <button onclick="publishConfirm('private')" style="width:100%;padding:16px;border-radius:16px;border:1.5px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="rgba(255,255,255,0.7)" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          비공개 — 나만 볼 수 있어요
+        </button>
+        <button onclick="publishCancel()" style="width:100%;padding:14px;border-radius:16px;border:none;background:transparent;color:var(--text-3);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;">
+          취소
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 제목/태그 입력 (공개 선택 시) -->
+    <div id="publish-step-2" style="display:none;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <button onclick="publishBackToStep1()" style="width:32px;height:32px;border-radius:50%;background:var(--surface-2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="9" height="15" fill="none" viewBox="0 0 9 15"><path d="M7.5 1.5l-6 6 6 6" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="t2-bold" style="color:var(--text-1);">게시물 정보</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px;">
+        <div>
+          <label class="c1-medium" style="color:var(--text-3);display:block;margin-bottom:6px;">제목 <span style="color:var(--accent);">*</span></label>
+          <input id="publish-title-inp" type="text" maxlength="60" placeholder="작품 제목을 입력해주세요" style="width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;" oninput="publishTitleChange()">
+        </div>
+        <div>
+          <label class="c1-medium" style="color:var(--text-3);display:block;margin-bottom:6px;">태그 <span style="color:var(--text-4);font-size:11px;">(선택, 쉼표로 구분)</span></label>
+          <input id="publish-tag-inp" type="text" maxlength="80" placeholder="#BTS #정국 #AU" style="width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border-md);background:var(--surface-2);color:var(--text-1);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;">
+        </div>
+      </div>
+      <button id="publish-submit-btn" onclick="publishConfirm('public')" disabled style="width:100%;padding:16px;border-radius:16px;border:none;background:var(--surface-3);color:var(--text-4);font-size:15px;font-weight:700;font-family:inherit;cursor:not-allowed;transition:background .2s,color .2s;">
+        공개 피드에 올리기
+      </button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="b5-medium"></div>
 
 <script>
@@ -1885,59 +2049,135 @@ function go(id, fwd) {
 // ─── POST STORE ──────────────────────────
 const myPosts = []; // [{id, type, artistName, avUrl, msgs, bgUrl, thumb, ts, likes}]
 
+let _pendingPostId = null;
+let _pendingReset = null;
+
+function captureSnapshot(el) {
+  // 실제 렌더 크기 기록
+  const rect = el.getBoundingClientRect();
+  const clone = el.cloneNode(true);
+  // 인터랙티브 요소 제거
+  clone.querySelectorAll('input, textarea, button').forEach(n => n.remove());
+  clone.querySelectorAll('.story-bg-hint, #lock-bg-hint, #editor-bg-hint, .imsg-toolbar-row, .imsg-input-bar, .imsg-header, .topbar').forEach(n => n.remove());
+  clone.querySelectorAll('[onclick]').forEach(n => n.removeAttribute('onclick'));
+  // 실제 크기 고정
+  clone.style.cssText += `;width:${rect.width}px;height:${rect.height}px;overflow:hidden;flex-shrink:0;`;
+  return { html: clone.outerHTML, w: Math.round(rect.width), h: Math.round(rect.height) };
+}
+
 function postSaveChat() {
   const artistName = document.getElementById('artist-name').value.trim() || 'Artist';
   if (edMsgs.length === 0) { toast('메시지를 하나 이상 입력해주세요'); return; }
 
-  // 썸네일 HTML 스냅샷 (마지막 3개 메시지)
-  const preview = edMsgs.slice(-3);
+  const snap = captureSnapshot(document.getElementById('s-editor'));
   const id = Date.now();
-  const bgUrl = document.getElementById('editor-msgs').style.backgroundImage || '';
-
   myPosts.unshift({
     id, type: 'chat', artistName, avUrl: edAvUrl,
-    msgs: [...edMsgs], bgUrl,
-    preview, ts: new Date(), likes: 0
+    msgs: [...edMsgs], snap,
+    ts: new Date(), likes: 0, visibility: 'public'
   });
 
-  feedRenderMyPosts();
-  postOpenDetail(id);
-  editorReset();
+  _pendingPostId = id;
+  _pendingReset = () => editorReset();
+  publishOpen();
 }
 
 function postSaveStory() {
   const artistName = document.getElementById('story-name-inp').value.trim() || 'Artist';
-  const bgStyle = document.getElementById('story-bg').style.backgroundImage || '';
+  const snap = captureSnapshot(document.getElementById('story-canvas'));
   const id = Date.now();
 
   myPosts.unshift({
     id, type: 'story', artistName, avUrl: null,
-    msgs: [...sMsgs], bgUrl: bgStyle,
-    ts: new Date(), likes: 0
+    msgs: [...sMsgs], snap,
+    ts: new Date(), likes: 0, visibility: 'public'
   });
 
-  feedRenderMyPosts();
-  postOpenDetail(id);
-  storyReset();
+  _pendingPostId = id;
+  _pendingReset = () => storyReset();
+  publishOpen();
 }
 
 function postSaveLock() {
-  const time = document.getElementById('lock-time-display').textContent;
-  const date = document.getElementById('lock-date-display').textContent;
+  const snap = captureSnapshot(document.getElementById('lock-canvas'));
   const id = Date.now();
 
   myPosts.unshift({
     id, type: 'lock',
     artistName: lockNotifs[0] ? lockNotifs[0].username : 'Lock',
     avUrl: null,
-    lockTime: time, lockDate: date,
+    lockTime: document.getElementById('lock-time-display').textContent,
+    lockDate: document.getElementById('lock-date-display').textContent,
     notifs: [...lockNotifs],
-    bgUrl: document.getElementById('lock-bg').style.backgroundImage || '',
-    ts: new Date(), likes: 0
+    snap, ts: new Date(), likes: 0, visibility: 'public'
   });
 
+  _pendingPostId = id;
+  _pendingReset = null;
+  publishOpen();
+}
+
+function publishOpen() {
+  document.getElementById('publish-step-1').style.display = 'block';
+  document.getElementById('publish-step-2').style.display = 'none';
+  document.getElementById('publish-modal').style.display = 'flex';
+}
+
+function publishSelectPublic() {
+  document.getElementById('publish-step-1').style.display = 'none';
+  document.getElementById('publish-step-2').style.display = 'block';
+  document.getElementById('publish-title-inp').value = '';
+  document.getElementById('publish-tag-inp').value = '';
+  publishTitleChange();
+  setTimeout(() => document.getElementById('publish-title-inp').focus(), 100);
+}
+
+function publishBackToStep1() {
+  document.getElementById('publish-step-1').style.display = 'block';
+  document.getElementById('publish-step-2').style.display = 'none';
+}
+
+function publishTitleChange() {
+  const val = document.getElementById('publish-title-inp').value.trim();
+  const btn = document.getElementById('publish-submit-btn');
+  btn.disabled = !val;
+  btn.style.background = val ? 'var(--accent-grad)' : 'var(--surface-3)';
+  btn.style.color = val ? '#fff' : 'var(--text-4)';
+  btn.style.cursor = val ? 'pointer' : 'not-allowed';
+}
+
+function publishConfirm(visibility) {
+  document.getElementById('publish-modal').style.display = 'none';
+  const post = myPosts.find(p => p.id === _pendingPostId);
+  if (post) {
+    post.visibility = visibility;
+    if (visibility === 'public') {
+      post.title = document.getElementById('publish-title-inp').value.trim();
+      const rawTags = document.getElementById('publish-tag-inp').value.trim();
+      post.tags = rawTags ? rawTags.split(/[,\s]+/).filter(t=>t).map(t => t.startsWith('#') ? t : '#'+t) : [];
+    }
+  }
   feedRenderMyPosts();
-  postOpenDetail(id);
+  if (_pendingReset) _pendingReset();
+  _pendingPostId = null;
+  _pendingReset = null;
+  const label = visibility === 'public' ? '공개 피드에 올렸어요' : '비공개로 저장했어요';
+  toast(label);
+  go('s-myprofile', 1);
+  mpSwitchTab('posts');
+}
+
+function publishCancel() {
+  document.getElementById('publish-modal').style.display = 'none';
+  const post = myPosts.find(p => p.id === _pendingPostId);
+  if (post) post.visibility = 'private';
+  feedRenderMyPosts();
+  if (_pendingReset) _pendingReset();
+  _pendingPostId = null;
+  _pendingReset = null;
+  toast('저장됐어요');
+  go('s-myprofile', 1);
+  mpSwitchTab('posts');
 }
 
 function postOpenDetail(id) {
@@ -1946,54 +2186,49 @@ function postOpenDetail(id) {
   go('s-detail', 1);
 }
 
+function makeSnapshotPreview(post) {
+  const snap = post.snap;
+  if (!snap) return '';
+  const displayW = 312;
+  const s = displayW / snap.w;
+  const displayH = Math.round(snap.h * s);
+  return `
+    <div style="width:calc(100% - 24px);margin:12px auto 0;border-radius:16px;overflow:hidden;position:relative;background:#000;height:${displayH}px;">
+      <div style="position:absolute;top:0;left:0;width:${snap.w}px;height:${snap.h}px;transform:scale(${s});transform-origin:top left;pointer-events:none;contain:strict;">
+        <div style="position:relative;width:${snap.w}px;height:${snap.h}px;overflow:hidden;">
+          ${snap.html}
+        </div>
+      </div>
+      <div style="position:absolute;bottom:10px;left:0;right:0;text-align:center;z-index:10;">
+        <strong style="font-size:9px;color:rgba(255,255,255,0.35);">chatfic</strong>
+      </div>
+    </div>`;
+}
+
+function makeFeedSnapshotPreview(post) {
+  const snap = post.snap;
+  if (!snap) return '';
+  const cardW = 328;
+  const s = cardW / snap.w;
+  const cardH = Math.round(snap.h * s);
+  return `
+    <div style="width:100%;height:${cardH}px;position:relative;overflow:hidden;background:#000;border-radius:12px 12px 0 0;">
+      <div style="position:absolute;top:0;left:0;width:${snap.w}px;height:${snap.h}px;transform:scale(${s});transform-origin:top left;pointer-events:none;contain:strict;">
+        <div style="position:relative;width:${snap.w}px;height:${snap.h}px;overflow:hidden;">
+          ${snap.html}
+        </div>
+      </div>
+      <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:10;">
+        <strong style="font-size:9px;color:rgba(255,255,255,0.3);">chatfic</strong>
+      </div>
+    </div>`;
+}
+
 function renderDetailScreen(post) {
   const container = document.getElementById('detail-content');
   if (!post) return;
 
-  let previewHTML = '';
-  if (post.type === 'chat') {
-    const msgs3 = post.preview || post.msgs.slice(-3);
-    const bubblesHTML = msgs3.map(m => {
-      const isSent = m.who === 'a';
-      return `<div class="detail-bub ${isSent?'sent':'recv'} b3-regular" style="${isSent?'align-self:flex-end;':''}">${escHtml(m.txt||'')}</div>`;
-    }).join('');
-    const bgExtra = post.bgUrl ? `background:linear-gradient(rgba(4,8,6,0.55),rgba(4,8,6,0.55)),${post.bgUrl.replace(/^url\(|\)$/g,'')} center/cover;` : 'background:linear-gradient(155deg,#0f0f1a 0%,#1a1033 55%,#0d1f3c 100%);';
-    previewHTML = `
-      <div class="detail-image-placeholder" style="${bgExtra}">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(178,75,243,0.15) 0%,transparent 70%);"></div>
-        <div class="detail-chat-preview">${bubblesHTML}</div>
-        <div class="detail-wm b6-regular">made with <strong>chatfic</strong></div>
-      </div>`;
-  } else if (post.type === 'story') {
-    const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(155deg,#1a0a2e,#2d1b4e);';
-    const bubblesHTML = (post.msgs||[]).slice(-3).map(m => {
-      const isSent = m.who === 'a';
-      return `<div class="detail-bub ${isSent?'sent':'recv'} b3-regular" style="${isSent?'align-self:flex-end;':''}">${escHtml(m.txt||'')}</div>`;
-    }).join('');
-    previewHTML = `
-      <div class="detail-image-placeholder" style="${bgStyle}">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.3) 0%,transparent 40%,rgba(0,0,0,0.5) 100%);"></div>
-        <div class="detail-chat-preview">${bubblesHTML}</div>
-        <div class="detail-wm b6-regular">made with <strong>chatfic</strong></div>
-      </div>`;
-  } else if (post.type === 'lock') {
-    const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(160deg,#0a0a1a,#111130);';
-    const notifsHTML = (post.notifs||[]).slice(0,2).map(n => `
-      <div style="background:rgba(28,28,36,0.85);border-radius:12px;padding:9px 12px;display:flex;gap:8px;align-items:center;">
-        <div style="width:26px;height:26px;border-radius:7px;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">💬</div>
-        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#fff;">${escHtml(n.username||'')}</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">${escHtml(n.msg||'')}</div></div>
-      </div>`).join('');
-    previewHTML = `
-      <div class="detail-image-placeholder" style="${bgStyle}">
-        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.2);"></div>
-        <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px 16px;gap:10px;">
-          <div style="font-size:42px;font-weight:200;color:#fff;letter-spacing:-2px;">${escHtml(post.lockTime||'00:00')}</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:8px;">${escHtml(post.lockDate||'')}</div>
-          ${notifsHTML}
-        </div>
-        <div class="detail-wm b6-regular">made with <strong>chatfic</strong></div>
-      </div>`;
-  }
+  const previewHTML = makeSnapshotPreview(post);
 
   const avInitial = (post.artistName||'A')[0].toUpperCase();
   const avHTML = post.avUrl
@@ -2013,11 +2248,13 @@ function renderDetailScreen(post) {
           </div>
         </div>
       </div>
+      ${post.title ? `<p class="t4-bold" style="color:var(--text-1);margin-bottom:6px;">${escHtml(post.title)}</p>` : ''}
+      ${(post.tags&&post.tags.length) ? `<p class="b5-medium" style="color:var(--accent);margin-bottom:8px;">${post.tags.map(t=>escHtml(t)).join(' ')}</p>` : ''}
       <p class="b4-regular" style="color:var(--text-2);line-height:1.6;margin-bottom:16px;">${typeLabel} · ${post.artistName} AU</p>
     </div>
     <div class="divider" style="background:var(--border);"></div>
     <div class="detail-actions-row" style="padding-top:16px;">
-      <button class="detail-action" id="like-btn-${post.id}" onclick="toggleLike(${post.id},this)">
+      <button class="detail-action" id="like-btn-${post.id}" onclick="toggleLike(${post.id},this)" style="${post.liked?'color:var(--accent);':''}">
         <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.8"/></svg>
         <span class="b5-medium">${post.likes}</span>
       </button>
@@ -2025,9 +2262,9 @@ function renderDetailScreen(post) {
         <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/></svg>
         <span class="b5-medium">0</span>
       </button>
-      <button class="detail-action" onclick="toast('저장했어요')">
+      <button class="detail-action" id="save-btn-${post.id}" onclick="toggleSave(${post.id},this)" style="${post.saved?'color:#FFD700;':''}">
         <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8"/></svg>
-        <span class="b5-medium">Save</span>
+        <span class="b5-medium">${post.saved?'저장됨':'Save'}</span>
       </button>
       <button class="detail-action" onclick="toast('공유 링크가 복사됐어요')">
         <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.8"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.8"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.8"/></svg>
@@ -2043,9 +2280,22 @@ function toggleLike(id, btn) {
   if (!post) return;
   post.liked = !post.liked;
   post.likes += post.liked ? 1 : -1;
+  if (post.liked) activityAdd('liked', id);
+  else activityRemove('liked', id);
   btn.style.color = post.liked ? 'var(--accent)' : '';
   btn.querySelector('span').textContent = post.likes;
   feedRenderMyPosts();
+}
+
+function toggleSave(id, btn) {
+  const post = myPosts.find(p => p.id === id);
+  if (!post) return;
+  post.saved = !post.saved;
+  if (post.saved) activityAdd('saved', id);
+  else activityRemove('saved', id);
+  btn.style.color = post.saved ? '#FFD700' : '';
+  btn.querySelector('span').textContent = post.saved ? '저장됨' : 'Save';
+  toast(post.saved ? '저장했어요 🔖' : '저장을 취소했어요');
 }
 
 function escHtml(s) {
@@ -2062,46 +2312,8 @@ function feedRenderMyPosts() {
     card.className = 'feed-card';
     card.onclick = () => { renderDetailScreen(post); go('s-detail',1); };
 
-    // 카드 비주얼
-    let visual = '';
-    if (post.type === 'chat') {
-      const bgExtra = post.bgUrl ? `background:linear-gradient(rgba(4,8,6,0.55),rgba(4,8,6,0.55)),${post.bgUrl.replace(/^url\(|\)$/g,'')} center/cover no-repeat;` : 'background:linear-gradient(160deg,#0f0c1a,#1a0f2e,#0d1520);';
-      const bubblesHTML = (post.preview||[]).map(m => {
-        const isSent = m.who === 'a';
-        return `<div style="align-self:${isSent?'flex-end':'flex-start'};max-width:220px;">
-          <div style="${isSent?'background:rgba(255,255,255,0.88);color:#191919;border-bottom-right-radius:3px;':'background:rgba(255,255,255,0.13);backdrop-filter:blur(10px);color:#fff;border-bottom-left-radius:3px;'}padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.4;">${escHtml(m.txt||'')}</div>
-        </div>`;
-      }).join('');
-      visual = `<div style="width:100%;aspect-ratio:4/5;${bgExtra}position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:32px 20px;gap:10px;">${bubblesHTML}</div>
-        <div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;"><strong style="font-size:9px;color:rgba(255,255,255,0.35);">chatfic</strong></div>
-      </div>`;
-    } else if (post.type === 'story') {
-      const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(155deg,#1a0a2e,#2d1b4e);';
-      const bubblesHTML = (post.msgs||[]).slice(-2).map(m => {
-        const isSent = m.who === 'a';
-        return `<div style="align-self:${isSent?'flex-end':'flex-start'};${isSent?'background:rgba(255,255,255,0.88);color:#191919;':'background:rgba(255,255,255,0.13);color:#fff;'}padding:8px 12px;border-radius:12px;font-size:12px;max-width:200px;">${escHtml(m.txt||'')}</div>`;
-      }).join('');
-      visual = `<div style="width:100%;aspect-ratio:4/5;${bgStyle}position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.3),transparent 40%,rgba(0,0,0,0.5) 100%);"></div>
-        <div style="position:absolute;bottom:20px;left:16px;right:16px;display:flex;flex-direction:column;gap:8px;">${bubblesHTML}</div>
-        <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;"><strong style="font-size:9px;color:rgba(255,255,255,0.35);">chatfic</strong></div>
-      </div>`;
-    } else if (post.type === 'lock') {
-      const bgStyle = post.bgUrl ? `background-image:${post.bgUrl};background-size:cover;background-position:center;` : 'background:linear-gradient(160deg,#0a0a1a,#111130);';
-      const n = (post.notifs||[])[0];
-      visual = `<div style="width:100%;aspect-ratio:4/5;${bgStyle}position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.2);"></div>
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:32px 16px;gap:6px;">
-          <div style="font-size:48px;font-weight:200;color:#fff;letter-spacing:-2px;margin-top:8px;">${escHtml(post.lockTime||'00:00')}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:16px;">${escHtml(post.lockDate||'')}</div>
-          ${n?`<div style="width:100%;background:rgba(28,28,36,0.85);border-radius:12px;padding:9px 12px;display:flex;gap:8px;align-items:center;">
-            <div style="width:26px;height:26px;border-radius:7px;background:#25D366;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;">💬</div>
-            <div><div style="font-size:11px;font-weight:700;color:#fff;">${escHtml(n.username)}</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">${escHtml(n.msg)}</div></div>
-          </div>`:''}
-        </div>
-      </div>`;
-    }
+    // 카드 비주얼 — 에디터 스냅샷 그대로 렌더링
+    const visual = makeFeedSnapshotPreview(post);
 
     const avInitial = (post.artistName||'A')[0].toUpperCase();
     const avInner = post.avUrl
@@ -2109,12 +2321,17 @@ function feedRenderMyPosts() {
       : avInitial;
     const typeTag = {chat:'Chat',story:'Story',lock:'Lock'}[post.type]||'';
 
+    const titleLine = post.title ? `<p class="b4-medium" style="color:var(--text-1);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.title)}</p>` : '';
+    const tagsLine = (post.tags&&post.tags.length) ? `<p class="c2-medium" style="color:var(--accent);margin-bottom:2px;">${post.tags.map(t=>escHtml(t)).join(' ')}</p>` : '';
+
     card.innerHTML = `${visual}
       <div class="feed-meta">
         <div class="feed-user">
           <div class="feed-user-av"><div class="feed-user-av-inner">${avInner}</div></div>
-          <div>
+          <div style="min-width:0;flex:1;">
             <p class="b5-medium" style="color:var(--text-1);">@my_aulog</p>
+            ${titleLine}
+            ${tagsLine}
             <span class="c2-medium feed-tag">#${escHtml(post.artistName)} · ${typeTag}</span>
           </div>
         </div>
@@ -2350,17 +2567,215 @@ function renderStoryChat() {
   });
 }
 
+// ─── BG 이미지 조절 엔진 ────────────────────────────────────
+const _bgAdj = {
+  url: '', onConfirm: null,
+  scale: 1, tx: 0, ty: 0,       // current transform
+  imgW: 0, imgH: 0,              // natural size
+  canW: 0, canH: 0,              // container size
+  // drag state
+  drag: false, lastX: 0, lastY: 0,
+  // pinch state
+  pinching: false, initDist: 0, initScale: 1,
+};
+
+function bgAdjOpen(url, onConfirm) {
+  _bgAdj.url = url;
+  _bgAdj.onConfirm = onConfirm;
+
+  const overlay = document.getElementById('bg-adjust-overlay');
+  const img = document.getElementById('bg-adjust-img');
+  const canvas = document.getElementById('bg-adjust-canvas');
+
+  img.src = url;
+  overlay.classList.add('show');
+
+  img.onload = () => {
+    _bgAdj.imgW = img.naturalWidth;
+    _bgAdj.imgH = img.naturalHeight;
+    const cr = canvas.getBoundingClientRect();
+    _bgAdj.canW = cr.width;
+    _bgAdj.canH = cr.height;
+    bgAdjFit('cover');
+  };
+}
+
+function bgAdjApplyTransform() {
+  const img = document.getElementById('bg-adjust-img');
+  const pct = Math.round(_bgAdj.scale * 100);
+  img.style.transform = `translate(${_bgAdj.tx}px,${_bgAdj.ty}px) scale(${_bgAdj.scale})`;
+  const slider = document.getElementById('bg-adj-slider');
+  slider.value = pct;
+  // update slider gradient
+  const frac = Math.min(1, Math.max(0, (pct - 10) / 290));
+  slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${frac*100}%, rgba(255,255,255,0.18) ${frac*100}%)`;
+  document.getElementById('bg-adj-scale-label').textContent = pct + '%';
+}
+
+function bgAdjFit(mode) {
+  const { imgW, imgH, canW, canH } = _bgAdj;
+  if (!imgW || !canW) return;
+  let s;
+  if (mode === 'cover') {
+    s = Math.max(canW / imgW, canH / imgH);
+  } else if (mode === 'contain') {
+    s = Math.min(canW / imgW, canH / imgH);
+  } else { // reset / original
+    s = 1;
+  }
+  _bgAdj.scale = s;
+  // center the image
+  _bgAdj.tx = (canW - imgW * s) / 2;
+  _bgAdj.ty = (canH - imgH * s) / 2;
+  bgAdjApplyTransform();
+}
+
+function bgAdjSlider(val) {
+  const s = Number(val) / 100;
+  // keep center pivot
+  const { imgW, imgH, canW, canH, scale, tx, ty } = _bgAdj;
+  const cx = canW / 2, cy = canH / 2;
+  const ratio = s / scale;
+  _bgAdj.scale = s;
+  _bgAdj.tx = cx + (tx - cx) * ratio;
+  _bgAdj.ty = cy + (ty - cy) * ratio;
+  bgAdjApplyTransform();
+}
+
+function bgAdjCancel() {
+  document.getElementById('bg-adjust-overlay').classList.remove('show');
+  document.getElementById('bg-adjust-img').src = '';
+}
+
+function bgAdjConfirm() {
+  const { url, scale, tx, ty, imgW, imgH, canW, canH, onConfirm } = _bgAdj;
+  document.getElementById('bg-adjust-overlay').classList.remove('show');
+  if (onConfirm) onConfirm({ url, scale, tx, ty, imgW, imgH, canW, canH });
+  document.getElementById('bg-adjust-img').src = '';
+}
+
+// ── drag ──
+(function setupBgAdjGestures() {
+  function init() {
+  const canvas = document.getElementById('bg-adjust-canvas');
+  if (!canvas) return;
+
+  // touch
+  canvas.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      _bgAdj.pinching = true;
+      _bgAdj.initDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+      _bgAdj.initScale = _bgAdj.scale;
+      const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const my = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      const cr = canvas.getBoundingClientRect();
+      _bgAdj._pinchCX = mx - cr.left;
+      _bgAdj._pinchCY = my - cr.top;
+    } else if (e.touches.length === 1) {
+      _bgAdj.pinching = false;
+      _bgAdj.drag = true;
+      _bgAdj.lastX = e.touches[0].clientX;
+      _bgAdj.lastY = e.touches[0].clientY;
+    }
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (_bgAdj.pinching && e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+      const s = _bgAdj.initScale * (dist / _bgAdj.initDist);
+      const ratio = s / _bgAdj.scale;
+      const cx = _bgAdj._pinchCX, cy = _bgAdj._pinchCY;
+      _bgAdj.tx = cx + (_bgAdj.tx - cx) * ratio;
+      _bgAdj.ty = cy + (_bgAdj.ty - cy) * ratio;
+      _bgAdj.scale = s;
+      bgAdjApplyTransform();
+    } else if (_bgAdj.drag && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - _bgAdj.lastX;
+      const dy = e.touches[0].clientY - _bgAdj.lastY;
+      _bgAdj.tx += dx; _bgAdj.ty += dy;
+      _bgAdj.lastX = e.touches[0].clientX;
+      _bgAdj.lastY = e.touches[0].clientY;
+      bgAdjApplyTransform();
+    }
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', e => {
+    if (e.touches.length < 2) _bgAdj.pinching = false;
+    if (e.touches.length === 0) _bgAdj.drag = false;
+  });
+
+  // mouse (desktop 테스트용)
+  canvas.addEventListener('mousedown', e => {
+    _bgAdj.drag = true; _bgAdj.lastX = e.clientX; _bgAdj.lastY = e.clientY;
+  });
+  canvas.addEventListener('mousemove', e => {
+    if (!_bgAdj.drag) return;
+    _bgAdj.tx += e.clientX - _bgAdj.lastX;
+    _bgAdj.ty += e.clientY - _bgAdj.lastY;
+    _bgAdj.lastX = e.clientX; _bgAdj.lastY = e.clientY;
+    bgAdjApplyTransform();
+  });
+  canvas.addEventListener('mouseup', () => { _bgAdj.drag = false; });
+  canvas.addEventListener('mouseleave', () => { _bgAdj.drag = false; });
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    const delta = -e.deltaY * 0.001;
+    const s = Math.max(0.1, Math.min(3, _bgAdj.scale * (1 + delta)));
+    const cr = canvas.getBoundingClientRect();
+    const cx = e.clientX - cr.left, cy = e.clientY - cr.top;
+    const ratio = s / _bgAdj.scale;
+    _bgAdj.tx = cx + (_bgAdj.tx - cx) * ratio;
+    _bgAdj.ty = cy + (_bgAdj.ty - cy) * ratio;
+    _bgAdj.scale = s;
+    bgAdjApplyTransform();
+  }, { passive: false });
+  } // end init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+// ── 조절 결과 → CSS background 스타일 변환 ──
+function bgAdjToCss(adj) {
+  // 이미지를 조절한 결과를 background-image + position + size 로 돌려줌
+  // background-size에 픽셀 단위로 rendered width/height 세팅
+  const w = Math.round(adj.imgW * adj.scale);
+  const h = Math.round(adj.imgH * adj.scale);
+  // background-position: top-left of rendered image in container coords
+  const posX = Math.round(adj.tx);
+  const posY = Math.round(adj.ty);
+  return {
+    backgroundImage: `url(${adj.url})`,
+    backgroundSize: `${w}px ${h}px`,
+    backgroundPosition: `${posX}px ${posY}px`,
+    backgroundRepeat: 'no-repeat',
+  };
+}
+
 function sBgImg(input) {
   const file = input.files[0]; if (!file) return;
   const url = URL.createObjectURL(file);
-  const bg = document.getElementById('story-bg');
-  bg.style.backgroundImage = `url(${url})`;
-  document.getElementById('story-bg-hint').style.display = 'none';
-  // reset mode back to chat after picking BG
-  sCurMode = 'bg';
-  document.getElementById('smode-bg').classList.add('on');
-  document.getElementById('story-chat-panel').classList.remove('show');
-  document.getElementById('story-text-panel').classList.remove('show');
+  bgAdjOpen(url, (adj) => {
+    const css = bgAdjToCss(adj);
+    const bg = document.getElementById('story-bg');
+    bg.style.backgroundImage = css.backgroundImage;
+    bg.style.backgroundSize = css.backgroundSize;
+    bg.style.backgroundPosition = css.backgroundPosition;
+    bg.style.backgroundRepeat = css.backgroundRepeat;
+    document.getElementById('story-bg-hint').style.display = 'none';
+    sCurMode = 'bg';
+    document.getElementById('smode-bg').classList.add('on');
+    document.getElementById('story-chat-panel').classList.remove('show');
+    document.getElementById('story-text-panel').classList.remove('show');
+  });
 }
 
 function sAvImg(input) {
@@ -2524,17 +2939,20 @@ function edPortraitImg(input) {
 function edBgImg(input) {
   const file = input.files[0]; if (!file) return;
   const url = URL.createObjectURL(file);
-  const msgs = document.getElementById('editor-msgs');
-  // 그라디언트 dim + 이미지 멀티 레이어
-  msgs.style.background = `linear-gradient(rgba(4,8,6,0.55), rgba(4,8,6,0.55)), url(${url}) center / cover no-repeat`;
-  document.getElementById('editor-bg-hint').classList.remove('show');
-  // BG 업로드 시 에디터 다크 모드로 전환
-  document.getElementById('s-editor').classList.add('editor-bg-mode');
-  // photo slot → "Change BG" (다크 전환 후에도 버튼 유지)
-  const photoSVG2 = `<svg width="12" height="12" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="1.8"/></svg>`;
-  document.getElementById('editor-photo-slot').innerHTML = `
-    <button class="toolbar-photo-btn" style="background:rgba(255,78,139,0.15);color:#FF6B9D;" onclick="document.getElementById('editor-bg-file').click()">${photoSVG2} Change BG</button>
-    <div class="toolbar-sep" style="background:rgba(255,255,255,0.1);"></div>`;
+  bgAdjOpen(url, (adj) => {
+    const css = bgAdjToCss(adj);
+    const msgs = document.getElementById('editor-msgs');
+    msgs.style.backgroundImage = `linear-gradient(rgba(4,8,6,0.55), rgba(4,8,6,0.55)), ${css.backgroundImage}`;
+    msgs.style.backgroundSize = `auto, ${css.backgroundSize}`;
+    msgs.style.backgroundPosition = `0 0, ${css.backgroundPosition}`;
+    msgs.style.backgroundRepeat = `no-repeat, no-repeat`;
+    document.getElementById('editor-bg-hint').classList.remove('show');
+    document.getElementById('s-editor').classList.add('editor-bg-mode');
+    const photoSVG2 = `<svg width="12" height="12" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="1.8"/></svg>`;
+    document.getElementById('editor-photo-slot').innerHTML = `
+      <button class="toolbar-photo-btn" style="background:rgba(255,78,139,0.15);color:#FF6B9D;" onclick="document.getElementById('editor-bg-file').click()">${photoSVG2} Change BG</button>
+      <div class="toolbar-sep" style="background:rgba(255,255,255,0.1);"></div>`;
+  });
 }
 
 (function initCarousel() {
@@ -2913,10 +3331,15 @@ function lockInit() {
 function lockSetBg(input) {
   const file = input.files[0]; if (!file) return;
   const url = URL.createObjectURL(file);
-  document.getElementById('lock-bg').style.backgroundImage = `url(${url})`;
-  document.getElementById('lock-bg').style.backgroundSize = 'cover';
-  document.getElementById('lock-bg').style.backgroundPosition = 'center';
-  document.getElementById('lock-bg-hint').style.display = 'none';
+  bgAdjOpen(url, (adj) => {
+    const css = bgAdjToCss(adj);
+    const bg = document.getElementById('lock-bg');
+    bg.style.backgroundImage = css.backgroundImage;
+    bg.style.backgroundSize = css.backgroundSize;
+    bg.style.backgroundPosition = css.backgroundPosition;
+    bg.style.backgroundRepeat = css.backgroundRepeat;
+    document.getElementById('lock-bg-hint').style.display = 'none';
+  });
 }
 
 function lockCanvasClick(e) {
@@ -3126,22 +3549,192 @@ function toast(msg) {
 // ─── ME 페이지 ────────────────────────
 let mpCurrentTab = 'posts';
 let mpCurrentFilter = 'all';
+let mpBiasName = '';
+let mpBiasDate = ''; // 'YYYY-MM-DD'
+let mpBiasImg = ''; // data URL
+
+// 활동 데이터
+let activityData = { liked: [], saved: [], commented: [] };
+let mpCurrentActivity = 'liked';
+
+function activityAdd(type, postId) {
+  if (!activityData[type]) return;
+  if (!activityData[type].includes(postId)) activityData[type].unshift(postId);
+}
+function activityRemove(type, postId) {
+  if (!activityData[type]) return;
+  activityData[type] = activityData[type].filter(id => id !== postId);
+}
+
+function mpSetActivity(act, btn) {
+  mpCurrentActivity = act;
+  document.querySelectorAll('.mp-act-btn').forEach(b => {
+    const on = b === btn;
+    b.style.borderColor = on ? 'var(--accent)' : 'var(--border-md)';
+    b.style.background = on ? 'rgba(255,78,139,0.12)' : 'transparent';
+    b.style.color = on ? 'var(--accent)' : 'var(--text-3)';
+  });
+  mpRenderActivity();
+}
+
+function mpRenderActivity() {
+  const list = document.getElementById('mp-activity-list');
+  const empty = document.getElementById('mp-activity-empty');
+  if (!list) return;
+
+  const ids = activityData[mpCurrentActivity] || [];
+  const posts = ids.map(id => myPosts.find(p => p.id === id)).filter(Boolean);
+
+  list.innerHTML = '';
+  if (posts.length === 0) {
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const typeLabel = { chat:'Chat', story:'IG Story', lock:'Lock Screen' };
+  const typeColors = { chat:'#FF4E8B', story:'#FF6B35', lock:'#4A9EFF' };
+  posts.forEach(post => {
+    const card = document.createElement('div');
+    card.style.cssText = 'border-radius:16px;background:var(--surface-2);cursor:pointer;border:1px solid var(--border);overflow:hidden;';
+    card.onclick = () => { renderDetailScreen(post); go('s-detail', 1); };
+
+    const color = typeColors[post.type] || 'var(--accent)';
+    let thumbHTML = '';
+    if (post.snap) {
+      const s = 56 / post.snap.w;
+      const th = Math.round(post.snap.h * s);
+      thumbHTML = `<div style="width:56px;height:${Math.min(th,80)}px;border-radius:10px;overflow:hidden;flex-shrink:0;position:relative;background:#000;">
+        <div style="position:absolute;top:0;left:0;width:${post.snap.w}px;height:${post.snap.h}px;transform:scale(${s});transform-origin:top left;pointer-events:none;">${post.snap.html}</div>
+      </div>`;
+    } else {
+      thumbHTML = `<div style="width:56px;height:72px;border-radius:10px;background:${color}33;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:10px;font-weight:800;color:${color};">${typeLabel[post.type]||'?'}</span></div>`;
+    }
+
+    card.innerHTML = `<div style="display:flex;align-items:center;gap:12px;padding:12px;">
+      ${thumbHTML}
+      <div style="flex:1;min-width:0;">
+        <div class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.title || post.artistName || 'Untitled')}</div>
+        <div class="c2-medium" style="color:var(--text-3);margin-top:2px;">${new Date(post.ts).toLocaleDateString('ko-KR')}</div>
+        <div class="c2-medium" style="color:${color};margin-top:2px;">${typeLabel[post.type]||''}</div>
+      </div>
+      <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`;
+    list.appendChild(card);
+  });
+}
+
+function biasImgChanged(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById('bias-img-preview');
+    if (preview) {
+      preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    }
+    // store temporarily until save
+    input._pendingUrl = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function mpOpenBiasModal() {
+  document.getElementById('bias-name-inp').value = mpBiasName;
+  document.getElementById('bias-date-inp').value = mpBiasDate;
+  // show current image in preview
+  const preview = document.getElementById('bias-img-preview');
+  if (preview) {
+    if (mpBiasImg) {
+      preview.innerHTML = `<img src="${mpBiasImg}" style="width:100%;height:100%;object-fit:cover;">`;
+    } else {
+      preview.innerHTML = '⭐';
+    }
+  }
+  document.getElementById('bias-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('bias-name-inp').focus(), 100);
+}
+
+function mpCloseBiasModal() {
+  document.getElementById('bias-modal').style.display = 'none';
+}
+
+function mpSaveBias() {
+  mpBiasName = document.getElementById('bias-name-inp').value.trim();
+  mpBiasDate = document.getElementById('bias-date-inp').value;
+  const imgInp = document.getElementById('bias-img-inp');
+  if (imgInp && imgInp._pendingUrl) {
+    mpBiasImg = imgInp._pendingUrl;
+    imgInp._pendingUrl = null;
+  }
+  mpCloseBiasModal();
+  mpUpdateBiasBanner();
+}
+
+function mpUpdateBiasBanner() {
+  const nameEl = document.getElementById('mp-bias-name');
+  const ddayEl = document.getElementById('mp-bias-dday');
+  const iconEl = document.getElementById('mp-bias-icon');
+  if (!nameEl) return;
+
+  // update icon image
+  if (iconEl) {
+    if (mpBiasImg) {
+      iconEl.innerHTML = `<img src="${mpBiasImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      iconEl.style.background = 'none';
+    } else {
+      iconEl.innerHTML = '⭐';
+      iconEl.style.background = 'linear-gradient(135deg,#FF4E8B,#B24BF3)';
+    }
+  }
+
+  if (!mpBiasName && !mpBiasDate) {
+    nameEl.textContent = '최애를 설정해보세요';
+    ddayEl.textContent = '입덕날짜를 설정하면 디데이가 표시돼요';
+    ddayEl.style.color = 'var(--text-3)';
+    return;
+  }
+
+  nameEl.textContent = mpBiasName || '최애';
+
+  if (mpBiasDate) {
+    const start = new Date(mpBiasDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+    const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    if (diff === 0) {
+      ddayEl.textContent = '오늘 입덕했어요 🎉 D-Day!';
+      ddayEl.style.color = 'var(--accent)';
+    } else if (diff > 0) {
+      ddayEl.textContent = `입덕 ${diff.toLocaleString()}일째 💜 D+${diff.toLocaleString()}`;
+      ddayEl.style.color = 'var(--accent)';
+    } else {
+      ddayEl.textContent = `입덕까지 ${Math.abs(diff)}일 남았어요`;
+      ddayEl.style.color = 'var(--text-3)';
+    }
+  } else {
+    ddayEl.textContent = '입덕날짜를 설정하면 디데이가 표시돼요';
+    ddayEl.style.color = 'var(--text-3)';
+  }
+}
 
 function mpSwitchTab(tab) {
   mpCurrentTab = tab;
-  const isPosts = tab === 'posts';
-  document.getElementById('mp-panel-posts').style.display = isPosts ? 'block' : 'none';
-  document.getElementById('mp-panel-series').style.display = isPosts ? 'none' : 'block';
-  const tabPosts = document.getElementById('mp-tab-posts');
-  const tabSeries = document.getElementById('mp-tab-series');
-  tabPosts.style.borderBottomColor = isPosts ? 'var(--accent)' : 'transparent';
-  tabPosts.style.color = isPosts ? 'var(--text-1)' : 'var(--text-3)';
-  tabPosts.style.fontWeight = isPosts ? '700' : '600';
-  tabSeries.style.borderBottomColor = isPosts ? 'transparent' : 'var(--accent)';
-  tabSeries.style.color = isPosts ? 'var(--text-3)' : 'var(--text-1)';
-  tabSeries.style.fontWeight = isPosts ? '600' : '700';
+  const tabs = ['posts','series','activity'];
+  const panels = { posts:'mp-panel-posts', series:'mp-panel-series', activity:'mp-panel-activity' };
+  const btns = { posts:'mp-tab-posts', series:'mp-tab-series', activity:'mp-tab-activity' };
+  tabs.forEach(t => {
+    const isActive = t === tab;
+    document.getElementById(panels[t]).style.display = isActive ? 'block' : 'none';
+    const btn = document.getElementById(btns[t]);
+    btn.style.borderBottomColor = isActive ? 'var(--accent)' : 'transparent';
+    btn.style.color = isActive ? 'var(--text-1)' : 'var(--text-3)';
+    btn.style.fontWeight = isActive ? '700' : '600';
+  });
   if (tab === 'posts') mpRenderPosts();
-  else seriesRenderList();
+  else if (tab === 'series') seriesRenderList();
+  else mpRenderActivity();
 }
 
 function mpSetFilter(filter, btn) {
@@ -3189,31 +3782,46 @@ function mpRenderPosts() {
   empty.style.display = 'none';
 
   const typeLabel = { chat:'Chat', story:'IG Story', lock:'Lock Screen' };
+  const typeColors = { chat:'#FF4E8B', story:'#FF6B35', lock:'#4A9EFF' };
   filtered.forEach(post => {
     const inSeries = seriesPostIds.has(post.id);
     const card = document.createElement('div');
-    card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--surface-2);cursor:pointer;border:1px solid var(--border);';
+    card.style.cssText = 'border-radius:16px;background:var(--surface-2);cursor:pointer;border:1px solid var(--border);overflow:hidden;';
     card.onclick = () => { renderDetailScreen(post); go('s-detail', 1); };
 
-    const typeColors = { chat:'#FF4E8B', story:'#FF6B35', lock:'#4A9EFF' };
     const color = typeColors[post.type] || 'var(--accent)';
-    const avInitial = (post.artistName||'A')[0].toUpperCase();
-    const avHtml = post.avUrl
-      ? `<img src="${post.avUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-      : avInitial;
+
+    // 썸네일
+    let thumbHTML = '';
+    if (post.snap) {
+      const s = 56 / post.snap.w;
+      const th = Math.round(post.snap.h * s);
+      thumbHTML = `
+        <div style="width:56px;height:${Math.min(th,80)}px;border-radius:10px;overflow:hidden;flex-shrink:0;position:relative;background:#000;">
+          <div style="position:absolute;top:0;left:0;width:${post.snap.w}px;height:${post.snap.h}px;transform:scale(${s});transform-origin:top left;pointer-events:none;">
+            ${post.snap.html}
+          </div>
+        </div>`;
+    } else {
+      thumbHTML = `
+        <div style="width:56px;height:72px;border-radius:10px;background:${color}33;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:10px;font-weight:800;color:${color};">${typeLabel[post.type]||'?'}</span>
+        </div>`;
+    }
 
     card.innerHTML = `
-      <div style="width:44px;height:44px;border-radius:12px;background:${color}22;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden;">
-        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${color}33;color:${color};font-size:13px;font-weight:800;">${typeLabel[post.type]||'?'}</div>
-      </div>
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-          <span class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.artistName||'Untitled')}</span>
-          ${inSeries ? `<span style="font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(178,75,243,0.15);color:#B24BF3;font-weight:700;white-space:nowrap;">시리즈</span>` : ''}
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;">
+        ${thumbHTML}
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <span class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.artistName||'Untitled')}</span>
+            ${inSeries ? `<span style="font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(178,75,243,0.15);color:#B24BF3;font-weight:700;white-space:nowrap;flex-shrink:0;">시리즈</span>` : ''}
+          </div>
+          <div class="c2-medium" style="color:var(--text-3);">${new Date(post.ts).toLocaleDateString('ko-KR')}</div>
+          <div class="c2-medium" style="color:${color};margin-top:2px;">${typeLabel[post.type]||''}</div>
         </div>
-        <div class="c2-medium" style="color:var(--text-3);">${new Date(post.ts).toLocaleDateString('ko-KR')} · ${typeLabel[post.type]||''}</div>
+        <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
     list.appendChild(card);
   });
@@ -3260,13 +3868,29 @@ function epRenderImportList() {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--surface-3);cursor:pointer;border:1px solid var(--border);';
     row.onclick = () => epImportPost(post.id);
+
+    let thumbHTML = '';
+    if (post.snap) {
+      const s = 44 / post.snap.w;
+      const th = Math.round(post.snap.h * s);
+      thumbHTML = `
+        <div style="width:44px;height:${Math.min(th,60)}px;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;background:#000;">
+          <div style="position:absolute;top:0;left:0;width:${post.snap.w}px;height:${post.snap.h}px;transform:scale(${s});transform-origin:top left;pointer-events:none;">
+            ${post.snap.html}
+          </div>
+        </div>`;
+    } else {
+      thumbHTML = `
+        <div style="width:44px;height:44px;border-radius:10px;background:${color}33;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:10px;font-weight:800;color:${color};">${typeLabel[post.type]||'?'}</span>
+        </div>`;
+    }
+
     row.innerHTML = `
-      <div style="width:38px;height:38px;border-radius:10px;background:${color}33;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <span style="font-size:10px;font-weight:800;color:${color};">${typeLabel[post.type]||'?'}</span>
-      </div>
+      ${thumbHTML}
       <div style="flex:1;min-width:0;">
         <div class="b4-medium" style="color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(post.artistName||'Untitled')}</div>
-        <div class="c2-medium" style="color:var(--text-3);">${new Date(post.ts).toLocaleDateString('ko-KR')}</div>
+        <div class="c2-medium" style="color:var(--text-3);margin-top:2px;">${new Date(post.ts).toLocaleDateString('ko-KR')} · ${typeLabel[post.type]||''}</div>
       </div>
       <svg width="7" height="13" fill="none" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" stroke="rgba(255,255,255,0.25)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
